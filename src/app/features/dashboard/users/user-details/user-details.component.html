@@ -1,0 +1,195 @@
+<div class="user-details-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading user details...</p>
+  </div>
+
+  <!-- User Details -->
+  <div *ngIf="!loading && user" class="details-content">
+    <!-- Header Section -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="title-section">
+          <button mat-icon-button (click)="onBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <mat-icon class="header-icon">person</mat-icon>
+          <div>
+            <h1>{{ getFullName() }}</h1>
+            <p class="subtitle">{{ user.email }}</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button mat-raised-button
+                  [color]="user.enabled ? 'warn' : 'primary'"
+                  (click)="onToggleEnabled()"
+                  [disabled]="!canToggleEnabled()"
+                  [matTooltip]="!canToggleEnabled() ? 'Cannot disable admin users' : (user.enabled ? 'Disable User' : 'Enable User')">
+            <mat-icon>{{ user.enabled ? 'block' : 'check_circle' }}</mat-icon>
+            {{ user.enabled ? 'Disable' : 'Enable' }}
+          </button>
+          <button mat-raised-button color="warn" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+      <!-- Personal Information Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon">badge</mat-icon>
+          <mat-card-title>Personal Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>person</mat-icon>
+              <span>First Name</span>
+            </div>
+            <div class="info-value">{{ user.firstName }}</div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>person_outline</mat-icon>
+              <span>Last Name</span>
+            </div>
+            <div class="info-value">{{ user.lastName }}</div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>email</mat-icon>
+              <span>Email Address</span>
+            </div>
+            <div class="info-value email-value">{{ user.email }}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Account Details Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon account">admin_panel_settings</mat-icon>
+          <mat-card-title>Account Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>shield</mat-icon>
+              <span>Role</span>
+            </div>
+            <div class="info-value">
+              <mat-chip [class]="getRoleClass(user.role)">
+                {{ formatRole(user.role) }}
+              </mat-chip>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>power_settings_new</mat-icon>
+              <span>Account Status</span>
+            </div>
+            <div class="info-value">
+              <div class="status-badge" [class.enabled]="user.enabled" [class.disabled]="!user.enabled">
+                <mat-icon>{{ user.enabled ? 'check_circle' : 'cancel' }}</mat-icon>
+                <span>{{ user.enabled ? 'Active' : 'Disabled' }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Timeline Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon timeline">schedule</mat-icon>
+          <mat-card-title>Timeline</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>event</mat-icon>
+              <span>Joined On</span>
+            </div>
+            <div class="info-value value-highlight">
+              {{ formatDateTime(user.createdAt) }}
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>update</mat-icon>
+              <span>Last Updated</span>
+            </div>
+            <div class="info-value">
+              {{ formatDateTime(user.updatedAt) }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Summary Card -->
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon summary">analytics</mat-icon>
+          <mat-card-title>User Summary</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <mat-icon class="summary-icon">person</mat-icon>
+              <div>
+                <span class="summary-label">Full Name</span>
+                <span class="summary-value">{{ getFullName() }}</span>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">email</mat-icon>
+              <div>
+                <span class="summary-label">Email</span>
+                <span class="summary-value email-summary">{{ user.email }}</span>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">shield</mat-icon>
+              <div>
+                <span class="summary-label">Role</span>
+                <span class="summary-value">{{ formatRole(user.role) }}</span>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon" [style.color]="user.enabled ? '#4caf50' : '#f44336'">
+                {{ user.enabled ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+              <div>
+                <span class="summary-label">Status</span>
+                <span class="summary-value" [style.color]="user.enabled ? '#4caf50' : '#f44336'">
+                  {{ user.enabled ? 'Active' : 'Disabled' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

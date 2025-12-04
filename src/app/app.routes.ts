@@ -134,7 +134,16 @@ export const routes: Routes = [
       },
       {
         path: 'admin/users',
-        loadComponent: () => import('./shared/components/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent)
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/dashboard/users/users-list/users-list.component').then(m => m.UsersListComponent)
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./features/dashboard/users/user-details/user-details.component').then(m => m.UserDetailsComponent)
+          }
+        ]
       }
     ]
   },
