@@ -112,8 +112,25 @@ export const routes: Routes = [
         ]
       },
       {
-        path: 'fertilization',
-        loadComponent: () => import('./shared/components/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent)
+        path: 'fertilizations',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/dashboard/fertilizations/fertilizations-list/fertilizations-list.component').then(m => m.FertilizationsListComponent)
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./features/dashboard/fertilizations/fertilization-form/fertilization-form.component').then(m => m.FertilizationFormComponent)
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./features/dashboard/fertilizations/fertilization-details/fertilization-details.component').then(m => m.FertilizationDetailsComponent)
+          },
+          {
+            path: ':id/edit',
+            loadComponent: () => import('./features/dashboard/fertilizations/fertilization-form/fertilization-form.component').then(m => m.FertilizationFormComponent)
+          }
+        ]
       },
       {
         path: 'admin/users',

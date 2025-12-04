@@ -1,0 +1,124 @@
+<div class="fertilizations-list-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <mat-icon class="header-icon">spa</mat-icon>
+        <div>
+          <h1>Fertilization Management</h1>
+          <p class="subtitle">Schedule and track fertilization activities</p>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" (click)="onCreateFertilization()">
+        <mat-icon>add</mat-icon>
+        Schedule Fertilization
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <mat-card class="content-card">
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading fertilizations...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && fertilizations.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">spa</mat-icon>
+        <h2>No Fertilizations Scheduled</h2>
+        <p>Start by scheduling fertilization activities for your parcels.</p>
+        <button mat-raised-button color="primary" (click)="onCreateFertilization()">
+          <mat-icon>add</mat-icon>
+          Schedule First Fertilization
+        </button>
+      </div>
+
+      <!-- Fertilizations Table -->
+      <div *ngIf="!loading && fertilizations.length > 0" class="table-container">
+        <table mat-table [dataSource]="fertilizations" class="fertilizations-table">
+          <!-- Parcel Column -->
+          <ng-container matColumnDef="parcel">
+            <th mat-header-cell *matHeaderCellDef>Parcel</th>
+            <td mat-cell *matCellDef="let fertilization">
+              <div class="parcel-cell">
+                <mat-icon class="table-icon">landscape</mat-icon>
+                <span>{{ fertilization.parcelName || 'Unknown Parcel' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Scheduled DateTime Column -->
+          <ng-container matColumnDef="scheduledDatetime">
+            <th mat-header-cell *matHeaderCellDef>Scheduled</th>
+            <td mat-cell *matCellDef="let fertilization">
+              <div class="datetime-cell">
+                <mat-icon class="datetime-icon">schedule</mat-icon>
+                <span>{{ formatDateTime(fertilization.scheduledDatetime) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Fertilizer Type Column -->
+          <ng-container matColumnDef="fertilizerType">
+            <th mat-header-cell *matHeaderCellDef>Fertilizer Type</th>
+            <td mat-cell *matCellDef="let fertilization">
+              <span *ngIf="fertilization.fertilizerType" class="fertilizer-value">
+                {{ fertilization.fertilizerType }}
+              </span>
+              <span *ngIf="!fertilization.fertilizerType" class="not-set">Not specified</span>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let fertilization">
+              <mat-chip [class]="getStatusClass(fertilization.status)">
+                {{ formatStatus(fertilization.status) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let fertilization">
+              <div class="action-buttons">
+                <button mat-icon-button
+                        color="primary"
+                        (click)="onViewFertilization(fertilization)"
+                        matTooltip="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="accent"
+                        (click)="onEditFertilization(fertilization, $event)"
+                        matTooltip="Edit Fertilization"
+                        [disabled]="fertilization.status === 'COMPLETED' || fertilization.status === 'CANCELLED'">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="warn"
+                        (click)="onDeleteFertilization(fertilization, $event)"
+                        [disabled]="fertilization.status !== 'SCHEDULED'"
+                        [matTooltip]="fertilization.status === 'SCHEDULED' ? 'Delete Fertilization' : 'Only scheduled fertilizations can be deleted'">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: displayedColumns;"
+              class="table-row"
+              (click)="onViewFertilization(row)"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

@@ -18,5 +18,6 @@ export interface FertilizationRequest {
   scheduledDatetime: string;
   fertilizerType?: string;
   status?: FertilizationStatus;
+  notes?: string;
 }
 

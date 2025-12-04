@@ -1,0 +1,163 @@
+<div class="fertilization-form-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <button mat-icon-button (click)="onCancel()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <mat-icon class="header-icon">{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+        <div>
+          <h1>{{ pageTitle }}</h1>
+          <p class="subtitle">{{ isEditMode ? 'Update fertilization schedule and details' : 'Create a new fertilization schedule for a parcel' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="fertilizationForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>landscape</mat-icon>
+            Parcel Selection
+          </h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Parcel</mat-label>
+            <mat-select formControlName="parcelId" [disabled]="loading || loadingParcels">
+              <mat-option *ngFor="let parcel of parcels" [value]="parcel.id">
+                {{ parcel.name }} ({{ parcel.farmName }})
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>landscape</mat-icon>
+            <mat-error *ngIf="fertilizationForm.get('parcelId')?.hasError('required')">
+              Parcel is required
+            </mat-error>
+            <mat-hint>Select the parcel to fertilize</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>schedule</mat-icon>
+            Schedule
+          </h3>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Date</mat-label>
+              <input matInput
+                     [matDatepicker]="picker"
+                     formControlName="scheduledDate"
+                     [min]="minDate"
+                     [disabled]="loading">
+              <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="fertilizationForm.get('scheduledDate')?.hasError('required')">
+                Date is required
+              </mat-error>
+              <mat-hint>Fertilization date</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Time</mat-label>
+              <input matInput
+                     type="time"
+                     formControlName="scheduledTime"
+                     [disabled]="loading">
+              <mat-icon matPrefix>access_time</mat-icon>
+              <mat-error *ngIf="fertilizationForm.get('scheduledTime')?.hasError('required')">
+                Time is required
+              </mat-error>
+              <mat-hint>Fertilization time</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>spa</mat-icon>
+            Fertilizer Details
+          </h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fertilizer Type</mat-label>
+            <input matInput
+                   formControlName="fertilizerType"
+                   placeholder="e.g., NPK 10-10-10, Organic Compost"
+                   [disabled]="loading">
+            <mat-icon matPrefix>eco</mat-icon>
+            <mat-hint>Type or name of fertilizer (optional)</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>description</mat-icon>
+            Additional Notes
+          </h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notes</mat-label>
+            <textarea matInput
+                      formControlName="notes"
+                      placeholder="Additional information, application method, dosage, etc."
+                      rows="4"
+                      [disabled]="loading"></textarea>
+            <mat-icon matPrefix>note</mat-icon>
+            <mat-hint>Optional notes about this fertilization</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button mat-button
+                  type="button"
+                  (click)="onCancel()"
+                  [disabled]="loading">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="fertilizationForm.invalid || loading">
+            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+            {{ loading ? (isEditMode ? 'Updating...' : 'Scheduling...') : (isEditMode ? 'Update Fertilization' : 'Schedule Fertilization') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Info Section -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>info</mat-icon>
+      <mat-card-title>Fertilization Guidelines</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Timing:</strong> Apply fertilizers during active growing season</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Soil Test:</strong> Test soil before selecting fertilizer type</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Weather:</strong> Avoid application before heavy rain</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Documentation:</strong> Record fertilizer type and quantity for tracking</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

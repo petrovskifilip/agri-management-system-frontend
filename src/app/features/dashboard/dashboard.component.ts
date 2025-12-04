@@ -41,7 +41,7 @@ export class DashboardComponent {
     { label: 'Crops', icon: 'eco', route: '/dashboard/crops' },
     { label: 'Parcels', icon: 'landscape', route: '/dashboard/parcels' },
     { label: 'Irrigation', icon: 'water_drop', route: '/dashboard/irrigation' },
-    { label: 'Fertilization', icon: 'grass', route: '/dashboard/fertilization' },
+    { label: 'Fertilization', icon: 'grass', route: '/dashboard/fertilizations' },
     { label: 'User Management', icon: 'people', route: '/dashboard/admin/users', adminOnly: true }
   ];
 
