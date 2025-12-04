@@ -22,11 +22,41 @@ export interface ParcelRequest {
 }
 
 export interface ParcelWeather {
+  // Parcel information
+  parcelId: number;
+  parcelName: string;
+  latitude: number;
+  longitude: number;
+
+  // Current conditions
+  weatherCondition: string;        // e.g., "Rain", "Clear", "Clouds"
+  weatherDescription: string;      // e.g., "light rain", "clear sky"
+  weatherIcon: string;             // Icon code from API
+
+  // Temperature (in Celsius)
   temperature: number;
-  humidity: number;
-  windSpeed: number;
-  description: string;
-  rain: boolean;
-  rainAmount?: number;
+  feelsLike: number;
+
+  // Atmospheric conditions
+  humidity: number;                // Percentage
+  pressure: number;                // hPa
+
+  // Wind
+  windSpeed: number;               // m/s
+
+  // Rain
+  rainExpectedInOneHour: number;   // mm expected in next hour (0 if no rain expected)
+
+  // Cloud coverage
+  cloudiness: number;              // Percentage
+
+  // Visibility
+  visibility: number;              // Meters
+
+  // Location name from weather API
+  locationName: string;
+  country: string;
 }
+
+
 

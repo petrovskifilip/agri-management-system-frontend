@@ -71,7 +71,24 @@ export const routes: Routes = [
       },
       {
         path: 'parcels',
-        loadComponent: () => import('./shared/components/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent)
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/dashboard/parcels/parcels-list/parcels-list.component').then(m => m.ParcelsListComponent)
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./features/dashboard/parcels/parcel-form/parcel-form.component').then(m => m.ParcelFormComponent)
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./features/dashboard/parcels/parcel-details/parcel-details.component').then(m => m.ParcelDetailsComponent)
+          },
+          {
+            path: ':id/edit',
+            loadComponent: () => import('./features/dashboard/parcels/parcel-form/parcel-form.component').then(m => m.ParcelFormComponent)
+          }
+        ]
       },
       {
         path: 'irrigation',

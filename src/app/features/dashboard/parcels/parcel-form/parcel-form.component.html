@@ -1,0 +1,182 @@
+<div class="parcel-form-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <button mat-icon-button (click)="onCancel()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <mat-icon class="header-icon">{{ isEditMode ? 'edit' : 'add_location' }}</mat-icon>
+        <div>
+          <h1>{{ pageTitle }}</h1>
+          <p class="subtitle">{{ isEditMode ? 'Update parcel information and location' : 'Add a new parcel to your farm' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="parcelForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>landscape</mat-icon>
+            Parcel Details
+          </h3>
+
+          <!-- Parcel Name Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Parcel Name</mat-label>
+            <input matInput
+                   formControlName="name"
+                   placeholder="e.g., North Field, Section A"
+                   [disabled]="loading">
+            <mat-icon matPrefix>landscape</mat-icon>
+            <mat-error *ngIf="parcelForm.get('name')?.hasError('required')">
+              Parcel name is required
+            </mat-error>
+            <mat-error *ngIf="parcelForm.get('name')?.hasError('minlength')">
+              Parcel name must be at least 2 characters
+            </mat-error>
+            <mat-error *ngIf="parcelForm.get('name')?.hasError('maxlength')">
+              Parcel name cannot exceed 255 characters
+            </mat-error>
+            <mat-hint>A descriptive name for the parcel</mat-hint>
+          </mat-form-field>
+
+          <!-- Farm Selection -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Farm</mat-label>
+            <mat-select formControlName="farmId" [disabled]="loading || loadingFarms">
+              <mat-option *ngFor="let farm of farms" [value]="farm.id">
+                {{ farm.name }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>agriculture</mat-icon>
+            <mat-error *ngIf="parcelForm.get('farmId')?.hasError('required')">
+              Farm is required
+            </mat-error>
+            <mat-hint>Select the farm this parcel belongs to</mat-hint>
+          </mat-form-field>
+
+          <!-- Crop Selection -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Crop (Optional)</mat-label>
+            <mat-select formControlName="cropId" [disabled]="loading || loadingCrops">
+              <mat-option [value]="">None</mat-option>
+              <mat-option *ngFor="let crop of crops" [value]="crop.id">
+                {{ crop.name }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>eco</mat-icon>
+            <mat-hint>Select the crop planted in this parcel</mat-hint>
+          </mat-form-field>
+
+          <!-- Area Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Area</mat-label>
+            <input matInput
+                   type="number"
+                   formControlName="area"
+                   placeholder="1000"
+                   step="0.01"
+                   [disabled]="loading">
+            <mat-icon matPrefix>square_foot</mat-icon>
+            <span matSuffix>m²</span>
+            <mat-error *ngIf="parcelForm.get('area')?.hasError('min')">
+              Area must be greater than 0
+            </mat-error>
+            <mat-hint>Parcel area in square meters (optional)</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>location_on</mat-icon>
+            Location Coordinates
+          </h3>
+
+          <div class="form-row">
+            <!-- Latitude Field -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Latitude</mat-label>
+              <input matInput
+                     type="number"
+                     formControlName="latitude"
+                     placeholder="41.9973"
+                     step="0.000001"
+                     [disabled]="loading">
+              <mat-icon matPrefix>place</mat-icon>
+              <mat-hint>Latitude coordinate (optional)</mat-hint>
+            </mat-form-field>
+
+            <!-- Longitude Field -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Longitude</mat-label>
+              <input matInput
+                     type="number"
+                     formControlName="longitude"
+                     placeholder="21.4280"
+                     step="0.000001"
+                     [disabled]="loading">
+              <mat-icon matPrefix>place</mat-icon>
+              <mat-hint>Longitude coordinate (optional)</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="location-hint">
+            <mat-icon>info</mat-icon>
+            <p>Coordinates enable weather tracking and location-based features. You can find coordinates using Google Maps or GPS.</p>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button mat-button
+                  type="button"
+                  (click)="onCancel()"
+                  [disabled]="loading">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="parcelForm.invalid || loading">
+            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+            {{ loading ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Parcel' : 'Add Parcel') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Info Section -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>info</mat-icon>
+      <mat-card-title>Parcel Management</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Each parcel must belong to a farm</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Assign crops to track specific care requirements</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Add coordinates to enable weather monitoring</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Track irrigation and fertilization schedules</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

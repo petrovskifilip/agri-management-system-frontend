@@ -1,0 +1,133 @@
+<div class="parcels-list-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <mat-icon class="header-icon">landscape</mat-icon>
+        <div>
+          <h1>My Parcels</h1>
+          <p class="subtitle">Manage your land parcels and monitor conditions</p>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" (click)="onCreateParcel()">
+        <mat-icon>add</mat-icon>
+        Add New Parcel
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <mat-card class="content-card">
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading parcels...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && parcels.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">landscape</mat-icon>
+        <h2>No Parcels Yet</h2>
+        <p>Start by adding parcels to your farms to manage irrigation and cultivation.</p>
+        <button mat-raised-button color="primary" (click)="onCreateParcel()">
+          <mat-icon>add</mat-icon>
+          Add First Parcel
+        </button>
+      </div>
+
+      <!-- Parcels Table -->
+      <div *ngIf="!loading && parcels.length > 0" class="table-container">
+        <table mat-table [dataSource]="parcels" class="parcels-table">
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Parcel Name</th>
+            <td mat-cell *matCellDef="let parcel">
+              <div class="parcel-name">
+                <mat-icon class="table-icon">landscape</mat-icon>
+                <span>{{ parcel.name }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Farm Column -->
+          <ng-container matColumnDef="farmName">
+            <th mat-header-cell *matHeaderCellDef>Farm</th>
+            <td mat-cell *matCellDef="let parcel">
+              <div class="farm-cell">
+                <mat-icon class="farm-icon">agriculture</mat-icon>
+                <span>{{ parcel.farmName || 'Unknown' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Crop Column -->
+          <ng-container matColumnDef="cropName">
+            <th mat-header-cell *matHeaderCellDef>Crop</th>
+            <td mat-cell *matCellDef="let parcel">
+              <mat-chip *ngIf="parcel.cropName" class="crop-chip">
+                <mat-icon matChipAvatar>eco</mat-icon>
+                {{ parcel.cropName }}
+              </mat-chip>
+              <span *ngIf="!parcel.cropName" class="no-crop">No crop assigned</span>
+            </td>
+          </ng-container>
+
+          <!-- Area Column -->
+          <ng-container matColumnDef="area">
+            <th mat-header-cell *matHeaderCellDef>Area</th>
+            <td mat-cell *matCellDef="let parcel">
+              <span *ngIf="parcel.area" class="area-value">{{ parcel.area }} m²</span>
+              <span *ngIf="!parcel.area" class="not-set">Not set</span>
+            </td>
+          </ng-container>
+
+          <!-- Last Irrigated Column -->
+          <ng-container matColumnDef="lastIrrigated">
+            <th mat-header-cell *matHeaderCellDef>Last Irrigated</th>
+            <td mat-cell *matCellDef="let parcel">
+              <div class="date-cell">
+                <mat-icon class="date-icon">water_drop</mat-icon>
+                <span>{{ formatDate(parcel.lastIrrigatedAt) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let parcel">
+              <div class="action-buttons">
+                <button mat-icon-button
+                        color="primary"
+                        (click)="onViewParcel(parcel)"
+                        matTooltip="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="accent"
+                        (click)="onEditParcel(parcel, $event)"
+                        matTooltip="Edit Parcel">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="warn"
+                        (click)="onDeleteParcel(parcel, $event)"
+                        matTooltip="Delete Parcel">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: displayedColumns;"
+              class="table-row"
+              (click)="onViewParcel(row)"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

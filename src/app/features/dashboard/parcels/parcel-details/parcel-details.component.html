@@ -1,0 +1,289 @@
+<div class="parcel-details-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading parcel details...</p>
+  </div>
+
+  <!-- Parcel Details -->
+  <div *ngIf="!loading && parcel" class="details-content">
+    <!-- Header Section -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="title-section">
+          <button mat-icon-button (click)="onBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <mat-icon class="header-icon">landscape</mat-icon>
+          <div>
+            <h1>{{ parcel.name }}</h1>
+            <p class="subtitle">Parcel Details & Monitoring</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button mat-raised-button color="accent" (click)="onEdit()">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+          <button mat-raised-button color="warn" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+      <!-- Basic Information Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon">landscape</mat-icon>
+          <mat-card-title>Parcel Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>label</mat-icon>
+              <span>Parcel Name</span>
+            </div>
+            <div class="info-value">{{ parcel.name }}</div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>agriculture</mat-icon>
+              <span>Farm</span>
+            </div>
+            <div class="info-value">
+              <span class="farm-badge">{{ parcel.farmName || 'Unknown' }}</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>eco</mat-icon>
+              <span>Crop</span>
+            </div>
+            <div class="info-value">
+              <mat-chip *ngIf="parcel.cropName" class="crop-chip">
+                {{ parcel.cropName }}
+              </mat-chip>
+              <span class="not-set" *ngIf="!parcel.cropName">No crop assigned</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>square_foot</mat-icon>
+              <span>Area</span>
+            </div>
+            <div class="info-value">
+              <span *ngIf="parcel.area" class="value-highlight">{{ parcel.area }} m²</span>
+              <span class="not-set" *ngIf="!parcel.area">Not specified</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Location Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon location">place</mat-icon>
+          <mat-card-title>Location</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>my_location</mat-icon>
+              <span>Latitude</span>
+            </div>
+            <div class="info-value">
+              <span *ngIf="parcel.latitude" class="value-highlight">{{ parcel.latitude }}</span>
+              <span class="not-set" *ngIf="!parcel.latitude">Not set</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>my_location</mat-icon>
+              <span>Longitude</span>
+            </div>
+            <div class="info-value">
+              <span *ngIf="parcel.longitude" class="value-highlight">{{ parcel.longitude }}</span>
+              <span class="not-set" *ngIf="!parcel.longitude">Not set</span>
+            </div>
+          </div>
+
+          <div *ngIf="!parcel.latitude || !parcel.longitude" class="location-warning">
+            <mat-icon>warning</mat-icon>
+            <p>Add coordinates to enable weather monitoring and location-based features.</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Maintenance History Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon maintenance">history</mat-icon>
+          <mat-card-title>Maintenance History</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>water_drop</mat-icon>
+              <span>Last Irrigated</span>
+            </div>
+            <div class="info-value">
+              <span class="value-highlight">{{ formatDate(parcel.lastIrrigatedAt) }}</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>grass</mat-icon>
+              <span>Last Fertilized</span>
+            </div>
+            <div class="info-value">
+              <span class="value-highlight">{{ formatDate(parcel.lastFertilizedAt) }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Weather Card -->
+      <mat-card class="weather-card" *ngIf="parcel.latitude && parcel.longitude">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon weather">cloud</mat-icon>
+          <mat-card-title>Current Weather</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- Weather Loading -->
+          <div *ngIf="loadingWeather" class="weather-loading">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading weather data...</p>
+          </div>
+
+          <!-- Weather Data -->
+          <div *ngIf="hasWeatherData()" class="weather-content">
+            <!-- Main Weather Info -->
+            <div class="weather-main">
+              <div class="weather-icon-section">
+                <img [src]="getWeatherIconUrl(weather!.weatherIcon)"
+                     [alt]="weather!.weatherDescription"
+                     class="weather-icon">
+                <div class="weather-condition">
+                  <h3>{{ weather!.weatherCondition }}</h3>
+                  <p>{{ weather!.weatherDescription }}</p>
+                </div>
+              </div>
+              <div class="temperature-section">
+                <div class="temperature">{{ weather!.temperature }}°C</div>
+                <div class="feels-like">Feels like {{ weather!.feelsLike }}°C</div>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <!-- Rain Alert -->
+            <div *ngIf="isRainExpected()" class="rain-alert">
+              <mat-icon>water_drop</mat-icon>
+              <div>
+                <strong>Rain Expected!</strong>
+                <p>{{ weather!.rainExpectedInOneHour }} mm in the next hour</p>
+                <p class="irrigation-hint">Consider postponing irrigation</p>
+              </div>
+            </div>
+
+            <!-- Weather Details Grid -->
+            <div class="weather-details">
+              <div class="weather-detail-item">
+                <mat-icon>opacity</mat-icon>
+                <div>
+                  <span class="detail-label">Humidity</span>
+                  <span class="detail-value">{{ weather!.humidity }}%</span>
+                </div>
+              </div>
+
+              <div class="weather-detail-item">
+                <mat-icon>compress</mat-icon>
+                <div>
+                  <span class="detail-label">Pressure</span>
+                  <span class="detail-value">{{ weather!.pressure }} hPa</span>
+                </div>
+              </div>
+
+              <div class="weather-detail-item">
+                <mat-icon>air</mat-icon>
+                <div>
+                  <span class="detail-label">Wind Speed</span>
+                  <span class="detail-value">{{ weather!.windSpeed }} m/s</span>
+                </div>
+              </div>
+
+              <div class="weather-detail-item">
+                <mat-icon>cloud</mat-icon>
+                <div>
+                  <span class="detail-label">Cloudiness</span>
+                  <span class="detail-value">{{ weather!.cloudiness }}%</span>
+                </div>
+              </div>
+
+              <div class="weather-detail-item">
+                <mat-icon>visibility</mat-icon>
+                <div>
+                  <span class="detail-label">Visibility</span>
+                  <span class="detail-value">{{ (weather!.visibility / 1000).toFixed(1) }} km</span>
+                </div>
+              </div>
+
+              <div class="weather-detail-item">
+                <mat-icon>location_on</mat-icon>
+                <div>
+                  <span class="detail-label">Location</span>
+                  <span class="detail-value">{{ weather!.locationName }}, {{ weather!.country }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Weather Data -->
+          <div *ngIf="!loadingWeather && !hasWeatherData()" class="no-weather">
+            <mat-icon>cloud_off</mat-icon>
+            <p>Weather data not available</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- No Coordinates Message -->
+      <mat-card class="weather-card no-coordinates" *ngIf="!parcel.latitude || !parcel.longitude">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon weather">cloud_off</mat-icon>
+          <mat-card-title>Weather Unavailable</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="no-coordinates-content">
+            <mat-icon class="large-icon">location_off</mat-icon>
+            <h3>No Location Coordinates</h3>
+            <p>Add latitude and longitude coordinates to enable real-time weather monitoring for this parcel.</p>
+            <button mat-raised-button color="primary" (click)="onEdit()">
+              <mat-icon>edit_location</mat-icon>
+              Add Coordinates
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
