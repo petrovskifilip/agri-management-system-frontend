@@ -41,6 +41,10 @@ export class FertilizationService {
     return this.http.get<Fertilization[]>(`${this.apiUrl}/status/${status}`);
   }
 
+  getFertilizationsByStatusForUser(status: FertilizationStatus): Observable<Fertilization[]> {
+    return this.http.get<Fertilization[]>(`${this.apiUrl}/user/status/${status}`);
+  }
+
   updateFertilization(id: number, request: FertilizationRequest): Observable<Fertilization> {
     return this.http.put<Fertilization>(`${this.apiUrl}/${id}`, request);
   }

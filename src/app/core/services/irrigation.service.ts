@@ -37,6 +37,10 @@ export class IrrigationService {
     return this.http.get<Irrigation[]>(`${this.apiUrl}/upcoming`);
   }
 
+  getUpcomingIrrigationsForUser(): Observable<Irrigation[]> {
+    return this.http.get<Irrigation[]>(`${this.apiUrl}/user/upcoming`);
+  }
+
   updateIrrigation(id: number, request: IrrigationRequest): Observable<Irrigation> {
     return this.http.put<Irrigation>(`${this.apiUrl}/${id}`, request);
   }

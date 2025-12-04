@@ -51,30 +51,48 @@ export class DashboardHomeComponent implements OnInit {
   }
 
   loadStatistics(): void {
-    // Load farms count
+    // Load farms count for the authenticated user
     this.farmService.getAllFarms().subscribe({
       next: (farms) => {
         this.stats.farms.value = farms.length;
         this.stats.farms.loading = false;
+
+        // Load parcels count from all user's farms
+        if (farms.length > 0) {
+          let totalParcels = 0;
+          let farmsProcessed = 0;
+
+          farms.forEach(farm => {
+            this.parcelService.getParcelsByFarm(farm.id).subscribe({
+              next: (parcels) => {
+                totalParcels += parcels.length;
+                farmsProcessed++;
+
+                if (farmsProcessed === farms.length) {
+                  this.stats.parcels.value = totalParcels;
+                  this.stats.parcels.loading = false;
+                }
+              },
+              error: () => {
+                farmsProcessed++;
+                if (farmsProcessed === farms.length) {
+                  this.stats.parcels.loading = false;
+                }
+              }
+            });
+          });
+        } else {
+          this.stats.parcels.loading = false;
+        }
       },
       error: () => {
         this.stats.farms.loading = false;
-      }
-    });
-
-    // Load parcels count
-    this.parcelService.getAllParcels().subscribe({
-      next: (parcels) => {
-        this.stats.parcels.value = parcels.length;
-        this.stats.parcels.loading = false;
-      },
-      error: () => {
         this.stats.parcels.loading = false;
       }
     });
 
-    // Load upcoming irrigations count
-    this.irrigationService.getUpcomingIrrigations().subscribe({
+    // Load upcoming irrigations count for the authenticated user
+    this.irrigationService.getUpcomingIrrigationsForUser().subscribe({
       next: (irrigations) => {
         this.stats.irrigations.value = irrigations.length;
         this.stats.irrigations.loading = false;
@@ -84,8 +102,8 @@ export class DashboardHomeComponent implements OnInit {
       }
     });
 
-    // Load scheduled fertilizations count
-    this.fertilizationService.getFertilizationsByStatus(FertilizationStatus.SCHEDULED).subscribe({
+    // Load scheduled fertilizations count for the authenticated user
+    this.fertilizationService.getFertilizationsByStatusForUser(FertilizationStatus.SCHEDULED).subscribe({
       next: (fertilizations) => {
         this.stats.fertilizations.value = fertilizations.length;
         this.stats.fertilizations.loading = false;

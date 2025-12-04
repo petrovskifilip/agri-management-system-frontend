@@ -58,6 +58,9 @@
   padding: 24px;
   transition: all 0.3s ease;
   cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   &:hover {
     transform: translateY(-4px);
@@ -69,8 +72,10 @@
     width: 48px;
     height: 48px;
     color: #7cb342;
-    margin: 0 auto 12px auto;
-    display: block;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   h3 {
