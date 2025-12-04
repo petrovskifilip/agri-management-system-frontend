@@ -1,0 +1,192 @@
+<div class="crop-form-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <button mat-icon-button (click)="onCancel()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <mat-icon class="header-icon">{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+        <div>
+          <h1>{{ pageTitle }}</h1>
+          <p class="subtitle">{{ isEditMode ? 'Update crop information and cultivation requirements' : 'Define a new crop type with growth requirements' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="cropForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>eco</mat-icon>
+            Crop Details
+          </h3>
+
+          <!-- Crop Name Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Crop Name</mat-label>
+            <input matInput
+                   formControlName="name"
+                   placeholder="e.g., Tomatoes, Wheat, Corn"
+                   [disabled]="loading">
+            <mat-icon matPrefix>eco</mat-icon>
+            <mat-error *ngIf="cropForm.get('name')?.hasError('required')">
+              Crop name is required
+            </mat-error>
+            <mat-error *ngIf="cropForm.get('name')?.hasError('minlength')">
+              Crop name must be at least 2 characters
+            </mat-error>
+            <mat-error *ngIf="cropForm.get('name')?.hasError('maxlength')">
+              Crop name cannot exceed 100 characters
+            </mat-error>
+            <mat-hint>The name of the crop variety</mat-hint>
+          </mat-form-field>
+
+          <!-- Fertilizer Type Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fertilizer Type</mat-label>
+            <input matInput
+                   formControlName="fertilizerType"
+                   placeholder="e.g., NPK 10-10-10, Organic Compost"
+                   [disabled]="loading">
+            <mat-icon matPrefix>science</mat-icon>
+            <mat-error *ngIf="cropForm.get('fertilizerType')?.hasError('maxlength')">
+              Fertilizer type cannot exceed 100 characters
+            </mat-error>
+            <mat-hint>Recommended fertilizer type (optional)</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>water_drop</mat-icon>
+            Irrigation Schedule
+          </h3>
+
+          <div class="form-row">
+            <!-- Irrigation Frequency Field -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Irrigation Frequency</mat-label>
+              <input matInput
+                     type="number"
+                     formControlName="irrigationFrequencyDays"
+                     placeholder="7"
+                     [disabled]="loading">
+              <mat-icon matPrefix>schedule</mat-icon>
+              <span matSuffix>days</span>
+              <mat-error *ngIf="cropForm.get('irrigationFrequencyDays')?.hasError('min')">
+                Must be at least 1 day
+              </mat-error>
+              <mat-hint>How often to irrigate (optional)</mat-hint>
+            </mat-form-field>
+
+            <!-- Irrigation Duration Field -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Irrigation Duration</mat-label>
+              <input matInput
+                     type="number"
+                     formControlName="irrigationDurationMinutes"
+                     placeholder="30"
+                     [disabled]="loading">
+              <mat-icon matPrefix>timer</mat-icon>
+              <span matSuffix>min</span>
+              <mat-error *ngIf="cropForm.get('irrigationDurationMinutes')?.hasError('min')">
+                Must be at least 1 minute
+              </mat-error>
+              <mat-hint>Duration per irrigation (optional)</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <!-- Water Requirement Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Water Requirement</mat-label>
+            <input matInput
+                   type="number"
+                   formControlName="waterRequirementLitersPerSqm"
+                   placeholder="5.0"
+                   step="0.1"
+                   [disabled]="loading">
+            <mat-icon matPrefix>opacity</mat-icon>
+            <span matSuffix>L/m²</span>
+            <mat-error *ngIf="cropForm.get('waterRequirementLitersPerSqm')?.hasError('min')">
+              Must be 0 or greater
+            </mat-error>
+            <mat-hint>Liters per square meter (optional)</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>grass</mat-icon>
+            Fertilization Plan
+          </h3>
+
+          <!-- Fertilization Frequency Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fertilization Frequency</mat-label>
+            <input matInput
+                   type="number"
+                   formControlName="fertilizationFrequencyDays"
+                   placeholder="14"
+                   [disabled]="loading">
+            <mat-icon matPrefix>schedule</mat-icon>
+            <span matSuffix>days</span>
+            <mat-error *ngIf="cropForm.get('fertilizationFrequencyDays')?.hasError('min')">
+              Must be at least 1 day
+            </mat-error>
+            <mat-hint>How often to fertilize (optional)</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button mat-button
+                  type="button"
+                  (click)="onCancel()"
+                  [disabled]="loading">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="cropForm.invalid || loading">
+            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+            {{ loading ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Crop' : 'Add Crop') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Info Section -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>info</mat-icon>
+      <mat-card-title>Crop Management Tips</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Define crop-specific irrigation and fertilization schedules</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Track water requirements for optimal crop growth</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Maintain consistent fertilization for better yields</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>All fields except crop name are optional - add details as needed</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

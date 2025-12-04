@@ -50,7 +50,24 @@ export const routes: Routes = [
       },
       {
         path: 'crops',
-        loadComponent: () => import('./shared/components/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent)
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/dashboard/crops/crops-list/crops-list.component').then(m => m.CropsListComponent)
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./features/dashboard/crops/crop-form/crop-form.component').then(m => m.CropFormComponent)
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./features/dashboard/crops/crop-details/crop-details.component').then(m => m.CropDetailsComponent)
+          },
+          {
+            path: ':id/edit',
+            loadComponent: () => import('./features/dashboard/crops/crop-form/crop-form.component').then(m => m.CropFormComponent)
+          }
+        ]
       },
       {
         path: 'parcels',
