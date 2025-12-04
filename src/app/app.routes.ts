@@ -92,7 +92,24 @@ export const routes: Routes = [
       },
       {
         path: 'irrigation',
-        loadComponent: () => import('./shared/components/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent)
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/dashboard/irrigation/irrigations-list/irrigations-list.component').then(m => m.IrrigationsListComponent)
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./features/dashboard/irrigation/irrigation-form/irrigation-form.component').then(m => m.IrrigationFormComponent)
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./features/dashboard/irrigation/irrigation-details/irrigation-details.component').then(m => m.IrrigationDetailsComponent)
+          },
+          {
+            path: ':id/edit',
+            loadComponent: () => import('./features/dashboard/irrigation/irrigation-form/irrigation-form.component').then(m => m.IrrigationFormComponent)
+          }
+        ]
       },
       {
         path: 'fertilization',

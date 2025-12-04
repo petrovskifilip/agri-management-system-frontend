@@ -1,0 +1,335 @@
+<div class="irrigation-details-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading irrigation details...</p>
+  </div>
+
+  <!-- Irrigation Details -->
+  <div *ngIf="!loading && irrigation" class="details-content">
+    <!-- Header Section -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="title-section">
+          <button mat-icon-button (click)="onBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <mat-icon class="header-icon">water_drop</mat-icon>
+          <div>
+            <h1>Irrigation Details</h1>
+            <p class="subtitle">{{ irrigation.parcelName || 'Parcel Information' }}</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button mat-raised-button
+                  color="primary"
+                  (click)="onExecute()"
+                  *ngIf="canExecute()"
+                  matTooltip="Manually execute this irrigation now">
+            <mat-icon>play_arrow</mat-icon>
+            Execute Now
+          </button>
+          <button mat-raised-button
+                  class="stop-button"
+                  (click)="onStop()"
+                  *ngIf="canStop()"
+                  matTooltip="Stop the currently running irrigation">
+            <mat-icon>stop</mat-icon>
+            Stop
+          </button>
+          <button mat-raised-button color="accent" (click)="onEdit()" [disabled]="!canEdit()">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+          <button mat-raised-button
+                  color="warn"
+                  (click)="onDelete()"
+                  [disabled]="!canDelete()"
+                  [matTooltip]="canDelete() ? 'Delete this irrigation' : 'Only scheduled irrigations can be deleted'">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+      <!-- Basic Information Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon">info</mat-icon>
+          <mat-card-title>Basic Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>landscape</mat-icon>
+              <span>Parcel</span>
+            </div>
+            <div class="info-value">{{ irrigation.parcelName || 'Unknown' }}</div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>flag</mat-icon>
+              <span>Status</span>
+            </div>
+            <div class="info-value">
+              <mat-chip [class]="getStatusClass(irrigation.status)">
+                {{ irrigation.status | titlecase }}
+              </mat-chip>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>schedule</mat-icon>
+              <span>Scheduled</span>
+            </div>
+            <div class="info-value value-highlight">
+              {{ formatDateTime(irrigation.scheduledDatetime) }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Irrigation Parameters Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon water">water_drop</mat-icon>
+          <mat-card-title>Parameters</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>timer</mat-icon>
+              <span>Duration</span>
+            </div>
+            <div class="info-value">
+              <span *ngIf="irrigation.durationMinutes" class="value-highlight">
+                {{ irrigation.durationMinutes }} minutes
+              </span>
+              <span *ngIf="!irrigation.durationMinutes" class="not-set">Not specified</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>opacity</mat-icon>
+              <span>Water Amount</span>
+            </div>
+            <div class="info-value">
+              <span *ngIf="irrigation.waterAmountLiters" class="value-highlight">
+                {{ irrigation.waterAmountLiters }} liters
+              </span>
+              <span *ngIf="!irrigation.waterAmountLiters" class="not-set">Not specified</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Execution Timeline Card -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon timeline">access_time</mat-icon>
+          <mat-card-title>Execution Timeline</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>play_arrow</mat-icon>
+              <span>Started At</span>
+            </div>
+            <div class="info-value">
+              {{ formatDateTime(irrigation.startDatetime) }}
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>check_circle</mat-icon>
+              <span>Finished At</span>
+            </div>
+            <div class="info-value">
+              {{ formatDateTime(irrigation.finishedDatetime) }}
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Created At</span>
+            </div>
+            <div class="info-value">
+              {{ formatDateTime(irrigation.createdAt) }}
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>update</mat-icon>
+              <span>Last Updated</span>
+            </div>
+            <div class="info-value">
+              {{ formatDateTime(irrigation.updatedAt) }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Retry Information Card (if applicable) -->
+      <mat-card class="info-card" *ngIf="irrigation.retryCount > 0 || irrigation.lastRetryAt">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon retry">refresh</mat-icon>
+          <mat-card-title>Retry Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-label">
+              <mat-icon>repeat</mat-icon>
+              <span>Retry Count</span>
+            </div>
+            <div class="info-value">
+              <span class="retry-badge">{{ irrigation.retryCount }}</span>
+            </div>
+          </div>
+
+          <mat-divider *ngIf="irrigation.lastRetryAt"></mat-divider>
+
+          <div class="info-row" *ngIf="irrigation.lastRetryAt">
+            <div class="info-label">
+              <mat-icon>history</mat-icon>
+              <span>Last Retry</span>
+            </div>
+            <div class="info-value">
+              {{ formatDateTime(irrigation.lastRetryAt) }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Status Description Card (if applicable) -->
+      <mat-card class="status-description-card" *ngIf="irrigation.statusDescription">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon description">description</mat-icon>
+          <mat-card-title>Status Description</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="description-content">
+            <mat-icon>note</mat-icon>
+            <p>{{ irrigation.statusDescription }}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Summary Card -->
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon summary">analytics</mat-icon>
+          <mat-card-title>Summary</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <mat-icon class="summary-icon">landscape</mat-icon>
+              <div>
+                <span class="summary-label">Parcel</span>
+                <span class="summary-value">{{ irrigation.parcelName || 'N/A' }}</span>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">flag</mat-icon>
+              <div>
+                <span class="summary-label">Status</span>
+                <span class="summary-value">{{ irrigation.status | titlecase }}</span>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">timer</mat-icon>
+              <div>
+                <span class="summary-label">Duration</span>
+                <span class="summary-value">
+                  {{ irrigation.durationMinutes ? (irrigation.durationMinutes + ' min') : 'Not set' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">opacity</mat-icon>
+              <div>
+                <span class="summary-label">Water</span>
+                <span class="summary-value">
+                  {{ irrigation.waterAmountLiters ? (irrigation.waterAmountLiters + ' L') : 'Not set' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Automation Info Card -->
+      <mat-card class="automation-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon automation">auto_mode</mat-icon>
+          <mat-card-title>Automated Execution</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="automation-features">
+            <div class="feature-item">
+              <mat-icon class="feature-icon">schedule</mat-icon>
+              <div class="feature-content">
+                <h4>Auto-Execution</h4>
+                <p>Runs automatically at scheduled time without manual intervention</p>
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <mat-icon class="feature-icon">cloud</mat-icon>
+              <div class="feature-content">
+                <h4>Weather Check</h4>
+                <p>Automatically postponed if rain is detected via weather API</p>
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <mat-icon class="feature-icon">refresh</mat-icon>
+              <div class="feature-content">
+                <h4>Smart Retry</h4>
+                <p>Automatic retry on failure with configurable delay and max attempts</p>
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <mat-icon class="feature-icon">email</mat-icon>
+              <div class="feature-content">
+                <h4>Notifications</h4>
+                <p>Email alerts for due, completed, and failed irrigations</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="automation-note">
+            <mat-icon>info</mat-icon>
+            <p>The system checks every minute for scheduled irrigations and executes them automatically. Manual execution is available via the "Execute Now" button.</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

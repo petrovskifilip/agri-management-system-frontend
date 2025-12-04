@@ -1,0 +1,135 @@
+<div class="irrigations-list-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <mat-icon class="header-icon">water_drop</mat-icon>
+        <div>
+          <h1>Irrigation Management</h1>
+          <p class="subtitle">Schedule and monitor irrigation activities</p>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" (click)="onCreateIrrigation()">
+        <mat-icon>add</mat-icon>
+        Schedule Irrigation
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <mat-card class="content-card">
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading irrigations...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && irrigations.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">water_drop</mat-icon>
+        <h2>No Irrigations Scheduled</h2>
+        <p>Start by scheduling irrigation activities for your parcels.</p>
+        <button mat-raised-button color="primary" (click)="onCreateIrrigation()">
+          <mat-icon>add</mat-icon>
+          Schedule First Irrigation
+        </button>
+      </div>
+
+      <!-- Irrigations Table -->
+      <div *ngIf="!loading && irrigations.length > 0" class="table-container">
+        <table mat-table [dataSource]="irrigations" class="irrigations-table">
+          <!-- Parcel Column -->
+          <ng-container matColumnDef="parcel">
+            <th mat-header-cell *matHeaderCellDef>Parcel</th>
+            <td mat-cell *matCellDef="let irrigation">
+              <div class="parcel-cell">
+                <mat-icon class="table-icon">landscape</mat-icon>
+                <span>{{ irrigation.parcelName || 'Unknown Parcel' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Scheduled DateTime Column -->
+          <ng-container matColumnDef="scheduledDatetime">
+            <th mat-header-cell *matHeaderCellDef>Scheduled</th>
+            <td mat-cell *matCellDef="let irrigation">
+              <div class="datetime-cell">
+                <mat-icon class="datetime-icon">schedule</mat-icon>
+                <span>{{ formatDateTime(irrigation.scheduledDatetime) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Duration Column -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>Duration</th>
+            <td mat-cell *matCellDef="let irrigation">
+              <span *ngIf="irrigation.durationMinutes" class="duration-value">
+                {{ irrigation.durationMinutes }} min
+              </span>
+              <span *ngIf="!irrigation.durationMinutes" class="not-set">Not set</span>
+            </td>
+          </ng-container>
+
+          <!-- Water Amount Column -->
+          <ng-container matColumnDef="waterAmount">
+            <th mat-header-cell *matHeaderCellDef>Water Amount</th>
+            <td mat-cell *matCellDef="let irrigation">
+              <span *ngIf="irrigation.waterAmountLiters" class="water-value">
+                {{ irrigation.waterAmountLiters }} L
+              </span>
+              <span *ngIf="!irrigation.waterAmountLiters" class="not-set">Not set</span>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let irrigation">
+              <mat-chip [class]="getStatusClass(irrigation.status)">
+                {{ irrigation.status | titlecase }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let irrigation">
+              <div class="action-buttons">
+                <button mat-icon-button
+                        color="primary"
+                        (click)="onViewIrrigation(irrigation)"
+                        matTooltip="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="accent"
+                        (click)="onEditIrrigation(irrigation, $event)"
+                        matTooltip="Edit Irrigation"
+                        [disabled]="irrigation.status === 'COMPLETED' || irrigation.status === 'CANCELLED'">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="warn"
+                        (click)="onDeleteIrrigation(irrigation, $event)"
+                        [disabled]="irrigation.status !== 'SCHEDULED'"
+                        [matTooltip]="irrigation.status === 'SCHEDULED' ? 'Delete Irrigation' : 'Only scheduled irrigations can be deleted'">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: displayedColumns;"
+              class="table-row"
+              (click)="onViewIrrigation(row)"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

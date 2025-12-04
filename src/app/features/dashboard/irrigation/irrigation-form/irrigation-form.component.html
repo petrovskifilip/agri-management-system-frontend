@@ -1,0 +1,216 @@
+<div class="irrigation-form-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <button mat-icon-button (click)="onCancel()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <mat-icon class="header-icon">{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+        <div>
+          <h1>{{ pageTitle }}</h1>
+          <p class="subtitle">{{ isEditMode ? 'Update irrigation schedule and details' : 'Create a new irrigation schedule for a parcel' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="irrigationForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>landscape</mat-icon>
+            Parcel Selection
+          </h3>
+
+          <!-- Parcel Selection -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Parcel</mat-label>
+            <mat-select formControlName="parcelId" [disabled]="loading || loadingParcels">
+              <mat-option *ngFor="let parcel of parcels" [value]="parcel.id">
+                {{ parcel.name }} ({{ parcel.farmName }})
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>landscape</mat-icon>
+            <mat-error *ngIf="irrigationForm.get('parcelId')?.hasError('required')">
+              Parcel is required
+            </mat-error>
+            <mat-hint>Select the parcel to irrigate</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>schedule</mat-icon>
+            Schedule
+          </h3>
+
+          <div class="form-row">
+            <!-- Scheduled Date -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Date</mat-label>
+              <input matInput
+                     [matDatepicker]="picker"
+                     formControlName="scheduledDate"
+                     [min]="minDate"
+                     [disabled]="loading">
+              <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="irrigationForm.get('scheduledDate')?.hasError('required')">
+                Date is required
+              </mat-error>
+              <mat-hint>Irrigation date</mat-hint>
+            </mat-form-field>
+
+            <!-- Scheduled Time -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Time</mat-label>
+              <input matInput
+                     type="time"
+                     formControlName="scheduledTime"
+                     [disabled]="loading">
+              <mat-icon matPrefix>access_time</mat-icon>
+              <mat-error *ngIf="irrigationForm.get('scheduledTime')?.hasError('required')">
+                Time is required
+              </mat-error>
+              <mat-hint>Irrigation time</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>water_drop</mat-icon>
+            Irrigation Parameters
+          </h3>
+
+          <div class="form-row">
+            <!-- Duration -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Duration</mat-label>
+              <input matInput
+                     type="number"
+                     formControlName="durationMinutes"
+                     placeholder="30"
+                     [disabled]="loading">
+              <mat-icon matPrefix>timer</mat-icon>
+              <span matSuffix>minutes</span>
+              <mat-error *ngIf="irrigationForm.get('durationMinutes')?.hasError('min')">
+                Duration must be at least 1 minute
+              </mat-error>
+              <mat-hint>Irrigation duration (optional)</mat-hint>
+            </mat-form-field>
+
+            <!-- Water Amount -->
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Water Amount</mat-label>
+              <input matInput
+                     type="number"
+                     formControlName="waterAmountLiters"
+                     placeholder="1000"
+                     step="0.01"
+                     [disabled]="loading">
+              <mat-icon matPrefix>opacity</mat-icon>
+              <span matSuffix>liters</span>
+              <mat-error *ngIf="irrigationForm.get('waterAmountLiters')?.hasError('min')">
+                Water amount must be positive
+              </mat-error>
+              <mat-hint>Total water amount (optional)</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>description</mat-icon>
+            Additional Notes
+          </h3>
+
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput
+                      formControlName="description"
+                      placeholder="Additional notes or description"
+                      rows="3"
+                      [disabled]="loading"></textarea>
+            <mat-icon matPrefix>description</mat-icon>
+            <mat-hint>Optional notes about this irrigation</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button mat-button
+                  type="button"
+                  (click)="onCancel()"
+                  [disabled]="loading">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="irrigationForm.invalid || loading">
+            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+            {{ loading ? (isEditMode ? 'Updating...' : 'Scheduling...') : (isEditMode ? 'Update Irrigation' : 'Schedule Irrigation') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Info Section -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>schedule</mat-icon>
+      <mat-card-title>Automated Scheduling</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="automation-badge">
+        <mat-icon>auto_mode</mat-icon>
+        <span>Automatic Execution Enabled</span>
+      </div>
+
+      <div class="info-section-divider"></div>
+
+      <h4>How It Works:</h4>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Auto-Execution:</strong> Irrigations run automatically at scheduled time</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Weather Integration:</strong> Postponed if rain is detected</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Smart Retry:</strong> Automatic retry on failure with configurable attempts</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p><strong>Email Notifications:</strong> Alerts for completion, failures, and due irrigations</p>
+      </div>
+
+      <div class="info-section-divider"></div>
+
+      <h4>Best Practices:</h4>
+      <div class="info-item">
+        <mat-icon>lightbulb</mat-icon>
+        <p>Schedule based on crop water requirements</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>lightbulb</mat-icon>
+        <p>Check parcel coordinates for weather tracking</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>lightbulb</mat-icon>
+        <p>Monitor status for timely execution</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
