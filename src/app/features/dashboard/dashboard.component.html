@@ -1,0 +1,52 @@
+<div class="dashboard-wrapper">
+  <mat-toolbar color="primary">
+    <span>Agricultural Management System</span>
+    <span class="spacer"></span>
+    <span class="user-name">{{ currentUser()?.firstName }} {{ currentUser()?.lastName }}</span>
+    <button mat-icon-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="dashboard-content">
+    <div class="welcome-section">
+      <h1>Welcome to Agricultural Management System</h1>
+      <p class="subtitle">Hello, {{ currentUser()?.firstName }}! You are logged in as {{ currentUser()?.role }}.</p>
+    </div>
+
+    <div class="info-cards">
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon class="card-icon">info</mat-icon>
+          <mat-card-title>Getting Started</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>The Agricultural Management System is ready to use.</p>
+          <p>More features will be available soon including:</p>
+          <ul>
+            <li>Farm Management</li>
+            <li>Crop Management</li>
+            <li>Parcel Management</li>
+            <li>Irrigation Scheduling</li>
+            <li>Fertilization Planning</li>
+            <li>Weather Integration</li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-icon class="card-icon">account_circle</mat-icon>
+          <mat-card-title>Your Profile</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Name:</strong> {{ currentUser()?.firstName }} {{ currentUser()?.lastName }}</p>
+          <p><strong>Email:</strong> {{ currentUser()?.email }}</p>
+          <p><strong>Role:</strong> {{ currentUser()?.role }}</p>
+          <p><strong>Status:</strong> {{ currentUser()?.enabled ? 'Active' : 'Inactive' }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

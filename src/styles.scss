@@ -1,1 +1,185 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Import Google Fonts for Agricultural Theme */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Agricultural Color Palette */
+:root {
+  /* Primary - Green tones (agriculture, growth) */
+  --primary-green: #2d5016;
+  --primary-green-light: #4a7c2c;
+  --primary-green-dark: #1a3009;
+
+  /* Secondary - Earth tones */
+  --secondary-brown: #8b4513;
+  --secondary-brown-light: #a0522d;
+  --secondary-brown-dark: #654321;
+
+  /* Accent - Golden harvest */
+  --accent-gold: #daa520;
+  --accent-gold-light: #f4c430;
+  --accent-gold-dark: #b8860b;
+
+  /* Natural tones */
+  --earth-tone: #d2691e;
+  --soil-brown: #6b4423;
+  --wheat-gold: #f5deb3;
+  --grass-green: #7cb342;
+  --sky-blue: #87ceeb;
+
+  /* Neutral colors */
+  --white: #ffffff;
+  --off-white: #fafaf8;
+  --light-gray: #e8e8e3;
+  --gray: #a5a5a0;
+  --dark-gray: #4a4a45;
+  --black: #2c2c28;
+
+  /* Semantic colors */
+  --success: #6b8e23;
+  --warning: #ff8c00;
+  --error: #c62828;
+  --info: #4a7c2c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', 'Roboto', "Helvetica Neue", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--off-white);
+  color: var(--black);
+}
+
+html, body {
+  height: 100%;
+}
+
+/* Headings with agricultural aesthetic */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: var(--primary-green-dark);
+}
+
+/* Material Design Overrides for Agricultural Theme */
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--primary-green) !important;
+  color: var(--white) !important;
+
+  &:hover:not([disabled]) {
+    background-color: var(--primary-green-light) !important;
+  }
+}
+
+.mat-toolbar.mat-primary {
+  background-color: var(--primary-green) !important;
+  color: var(--white) !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: var(--primary-green) !important;
+}
+
+.mat-mdc-text-field-wrapper {
+  &:hover .mat-mdc-form-field-focus-overlay {
+    opacity: 0.04 !important;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--grass-green);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--primary-green-light);
+  }
+}
+
+/* Material Icons - Ensure proper rendering */
+mat-icon {
+  font-family: 'Material Icons' !important;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+}
+
+/* Custom Snackbar Styling - Agricultural Theme */
+.mat-mdc-snack-bar-container {
+  &.success-snackbar {
+    --mdc-snackbar-container-color: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+
+    .mdc-snackbar__surface {
+      background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%) !important;
+      box-shadow: 0 4px 16px rgba(45, 80, 22, 0.4) !important;
+    }
+
+    .mat-mdc-snack-bar-label {
+      color: #ffffff !important;
+      font-weight: 500;
+    }
+
+    .mat-mdc-button.mat-mdc-snack-bar-action {
+      --mdc-text-button-label-text-color: #ffffff !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+      }
+    }
+  }
+
+  &.error-snackbar {
+    --mdc-snackbar-container-color: linear-gradient(135deg, #c62828 0%, #d32f2f 100%);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+
+    .mdc-snackbar__surface {
+      background: linear-gradient(135deg, #c62828 0%, #d32f2f 100%) !important;
+      box-shadow: 0 4px 16px rgba(198, 40, 40, 0.4) !important;
+    }
+
+    .mat-mdc-snack-bar-label {
+      color: #ffffff !important;
+      font-weight: 500;
+    }
+
+    .mat-mdc-button.mat-mdc-snack-bar-action {
+      --mdc-text-button-label-text-color: #ffffff !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+      }
+    }
+  }
+}
+

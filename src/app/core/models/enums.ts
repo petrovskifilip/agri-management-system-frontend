@@ -1,0 +1,23 @@
+export enum Role {
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER'
+}
+
+export enum IrrigationStatus {
+  SCHEDULED = 'SCHEDULED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  FAILED = 'FAILED',
+  RETRYING = 'RETRYING',
+  STOPPED = 'STOPPED'
+}
+
+export enum FertilizationStatus {
+  SCHEDULED = 'SCHEDULED',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED'
+}
+
+

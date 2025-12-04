@@ -1,0 +1,205 @@
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #fafaf8 0%, #f0f0eb 100%);
+  position: relative;
+
+  // Subtle agricultural pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 50px,
+        rgba(124, 179, 66, 0.02) 50px,
+        rgba(124, 179, 66, 0.02) 51px
+      );
+    pointer-events: none;
+  }
+}
+
+mat-toolbar {
+  box-shadow: 0 2px 8px rgba(45, 80, 22, 0.15);
+  position: relative;
+  z-index: 10;
+  font-family: 'Montserrat', sans-serif;
+  padding: 0 24px;
+
+  span:first-child {
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: 0.3px;
+
+    &::before {
+      content: '🌱 ';
+      font-size: 1.4rem;
+      margin-right: 8px;
+    }
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.user-name {
+  margin-right: 16px;
+  font-weight: 500;
+  padding: 6px 16px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  font-size: 0.95rem;
+
+  &::before {
+    content: '👤 ';
+    margin-right: 6px;
+  }
+}
+
+.dashboard-content {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 48px;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(124, 179, 66, 0.1) 0%, rgba(107, 142, 35, 0.05) 100%);
+  border-radius: 16px;
+  border: 2px solid rgba(124, 179, 66, 0.2);
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.08);
+
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.8rem;
+    color: #2d5016;
+    margin-bottom: 16px;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+
+    &::before {
+      content: '🚜';
+      display: block;
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+    }
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: #4a7c2c;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+}
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 28px;
+  margin-top: 32px;
+}
+
+.info-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(45, 80, 22, 0.12) !important;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(124, 179, 66, 0.15);
+  background: linear-gradient(to bottom, #ffffff 0%, #fafaf8 100%) !important;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(45, 80, 22, 0.2) !important;
+    border-color: rgba(124, 179, 66, 0.3);
+  }
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px 20px 0;
+    border-bottom: 2px solid rgba(124, 179, 66, 0.15);
+    padding-bottom: 16px;
+  }
+
+  .card-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    margin-right: 16px;
+    color: #4a7c2c;
+    background: linear-gradient(135deg, rgba(124, 179, 66, 0.15), rgba(107, 142, 35, 0.1));
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  ::ng-deep mat-card-title {
+    color: #2d5016 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+
+  mat-card-content {
+    padding: 20px;
+    color: #4a4a45;
+    line-height: 1.7;
+
+    p {
+      margin: 10px 0;
+      font-size: 0.98rem;
+
+      strong {
+        color: #2d5016;
+        font-weight: 600;
+      }
+    }
+
+    ul {
+      margin: 16px 0;
+      padding-left: 28px;
+
+      li {
+        margin: 10px 0;
+        color: #4a4a45;
+        font-size: 0.96rem;
+        position: relative;
+        padding-left: 8px;
+
+        &::before {
+          content: '🌿';
+          position: absolute;
+          left: -24px;
+          font-size: 0.9rem;
+        }
+
+        &::marker {
+          color: #7cb342;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+// Material icon button styling
+::ng-deep {
+  .mat-mdc-icon-button {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+    }
+  }
+}
+
+
+

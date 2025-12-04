@@ -1,0 +1,168 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 50%, #7cb342 100%);
+  position: relative;
+  overflow: hidden;
+
+  // Add subtle pattern overlay for agricultural feel
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.03) 10px,
+        rgba(255, 255, 255, 0.03) 20px
+      );
+    pointer-events: none;
+  }
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 20px;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(45, 80, 22, 0.3) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  position: relative;
+  z-index: 1;
+
+  .card-header-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 24px 0;
+    background: linear-gradient(to bottom, rgba(124, 179, 66, 0.1), transparent);
+    border-radius: 16px 16px 0 0;
+
+    .logo-icon {
+      font-size: 3rem !important;
+      width: 3rem !important;
+      height: 3rem !important;
+      margin-bottom: 16px;
+      color: #2d5016;
+      background: linear-gradient(135deg, #7cb342 0%, #4a7c2c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  mat-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0;
+    background: transparent;
+
+    mat-card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2d5016;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    mat-card-subtitle {
+      font-size: 1rem;
+      color: #6b8e23;
+      font-weight: 500;
+      text-align: center;
+    }
+  }
+
+  mat-card-content {
+    padding: 0 24px 24px;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 20px;
+
+  ::ng-deep {
+    .mat-mdc-text-field-wrapper {
+      background-color: rgba(124, 179, 66, 0.05);
+      border-radius: 8px;
+    }
+
+    .mat-mdc-form-field-focus-overlay {
+      background-color: rgba(124, 179, 66, 0.1);
+    }
+
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+      background-color: rgba(124, 179, 66, 0.05);
+    }
+
+    .mat-mdc-form-field-label {
+      color: #4a7c2c !important;
+    }
+
+    .mdc-line-ripple::after {
+      border-bottom-color: #2d5016 !important;
+    }
+
+    .mdc-text-field--focused .mdc-floating-label {
+      color: #2d5016 !important;
+    }
+  }
+}
+
+button[type="submit"] {
+  margin-top: 8px;
+  padding: 12px 24px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px;
+  border-radius: 8px !important;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%) !important;
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3) !important;
+  transition: all 0.3s ease !important;
+
+  &:hover:not([disabled]) {
+    background: linear-gradient(135deg, #4a7c2c 0%, #7cb342 100%) !important;
+    box-shadow: 0 6px 16px rgba(45, 80, 22, 0.4) !important;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background: #a5a5a0 !important;
+    box-shadow: none !important;
+  }
+}
+
+.register-link {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #4a4a45;
+
+  a {
+    color: #2d5016;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      color: #4a7c2c;
+      border-bottom-color: #7cb342;
+    }
+  }
+}
+
+
+
