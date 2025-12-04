@@ -1,0 +1,118 @@
+<div class="farms-list-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <mat-icon class="header-icon">agriculture</mat-icon>
+        <div>
+          <h1>My Farms</h1>
+          <p class="subtitle">Manage your agricultural properties</p>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" (click)="onCreateFarm()">
+        <mat-icon>add</mat-icon>
+        Create New Farm
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <mat-card class="content-card">
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading farms...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && farms.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">agriculture</mat-icon>
+        <h2>No Farms Yet</h2>
+        <p>Start by creating your first farm to manage your agricultural operations.</p>
+        <button mat-raised-button color="primary" (click)="onCreateFarm()">
+          <mat-icon>add</mat-icon>
+          Create First Farm
+        </button>
+      </div>
+
+      <!-- Farms Table -->
+      <div *ngIf="!loading && farms.length > 0" class="table-container">
+        <table mat-table [dataSource]="farms" class="farms-table">
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Farm Name</th>
+            <td mat-cell *matCellDef="let farm">
+              <div class="farm-name">
+                <mat-icon class="table-icon">agriculture</mat-icon>
+                <span>{{ farm.name }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Location Column -->
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef>Location</th>
+            <td mat-cell *matCellDef="let farm">
+              <div class="location-cell">
+                <mat-icon class="location-icon">location_on</mat-icon>
+                <span>{{ farm.location || 'Not specified' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Parcel Count Column -->
+          <ng-container matColumnDef="parcelCount">
+            <th mat-header-cell *matHeaderCellDef>Parcels</th>
+            <td mat-cell *matCellDef="let farm">
+              <div class="parcel-count">
+                <mat-icon class="count-icon">landscape</mat-icon>
+                <span>{{ farm.parcelCount || 0 }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Created Date Column -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Created</th>
+            <td mat-cell *matCellDef="let farm">{{ formatDate(farm.createdAt) }}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let farm">
+              <div class="action-buttons">
+                <button mat-icon-button
+                        color="primary"
+                        (click)="onViewFarm(farm)"
+                        matTooltip="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="accent"
+                        (click)="onEditFarm(farm, $event)"
+                        matTooltip="Edit Farm">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button
+                        color="warn"
+                        (click)="onDeleteFarm(farm, $event)"
+                        matTooltip="Delete Farm">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              class="table-row"
+              (click)="onViewFarm(row)"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

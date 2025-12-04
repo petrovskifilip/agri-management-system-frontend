@@ -1,0 +1,171 @@
+<div class="farm-details-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading farm details...</p>
+  </div>
+
+  <!-- Farm Details Content -->
+  <div *ngIf="!loading && farm" class="details-content">
+    <!-- Header Section -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="title-section">
+          <button mat-icon-button (click)="onBack()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <mat-icon class="header-icon">agriculture</mat-icon>
+          <div>
+            <h1>{{ farm.name }}</h1>
+            <p class="subtitle">Farm Details & Management</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button mat-raised-button color="accent" (click)="onEdit()">
+            <mat-icon>edit</mat-icon>
+            Edit Farm
+          </button>
+          <button mat-raised-button color="warn" (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Farm Information Card -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>info</mat-icon>
+        <mat-card-title>Farm Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>agriculture</mat-icon>
+              <span>Farm Name</span>
+            </div>
+            <div class="info-value">{{ farm.name }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>location_on</mat-icon>
+              <span>Location</span>
+            </div>
+            <div class="info-value">{{ farm.location || 'Not specified' }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>landscape</mat-icon>
+              <span>Total Parcels</span>
+            </div>
+            <div class="info-value">{{ farm.parcelCount || 0 }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Created On</span>
+            </div>
+            <div class="info-value">{{ formatDate(farm.createdAt) }}</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Parcels Section -->
+    <mat-card class="parcels-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>landscape</mat-icon>
+        <mat-card-title>Parcels</mat-card-title>
+        <div class="header-actions-inline">
+          <button mat-raised-button color="primary" (click)="onAddParcel()">
+            <mat-icon>add</mat-icon>
+            Add Parcel
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <!-- Parcels Loading -->
+        <div *ngIf="parcelsLoading" class="loading-container-small">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading parcels...</p>
+        </div>
+
+        <!-- Empty Parcels State -->
+        <div *ngIf="!parcelsLoading && parcels.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">landscape</mat-icon>
+          <h3>No Parcels Yet</h3>
+          <p>Add parcels to this farm to start managing your agricultural operations.</p>
+          <button mat-raised-button color="primary" (click)="onAddParcel()">
+            <mat-icon>add</mat-icon>
+            Add First Parcel
+          </button>
+        </div>
+
+        <!-- Parcels Table -->
+        <div *ngIf="!parcelsLoading && parcels.length > 0" class="table-container">
+          <table mat-table [dataSource]="parcels" class="parcels-table">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Parcel Name</th>
+              <td mat-cell *matCellDef="let parcel">
+                <div class="parcel-name">
+                  <mat-icon class="table-icon">landscape</mat-icon>
+                  <span>{{ parcel.name }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Size Column -->
+            <ng-container matColumnDef="size">
+              <th mat-header-cell *matHeaderCellDef>Size</th>
+              <td mat-cell *matCellDef="let parcel">{{ parcel.size }} hectares</td>
+            </ng-container>
+
+            <!-- Crop Column -->
+            <ng-container matColumnDef="crop">
+              <th mat-header-cell *matHeaderCellDef>Crop</th>
+              <td mat-cell *matCellDef="let parcel">
+                <div class="crop-cell">
+                  <mat-icon class="crop-icon">eco</mat-icon>
+                  <span>{{ parcel.cropName || 'No crop assigned' }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Soil Type Column -->
+            <ng-container matColumnDef="soilType">
+              <th mat-header-cell *matHeaderCellDef>Soil Type</th>
+              <td mat-cell *matCellDef="let parcel">{{ parcel.soilType || 'Not specified' }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let parcel">
+                <button mat-icon-button
+                        color="primary"
+                        (click)="onViewParcel(parcel)"
+                        matTooltip="View Parcel">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                class="table-row"
+                (click)="onViewParcel(row)"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

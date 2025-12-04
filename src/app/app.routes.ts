@@ -29,7 +29,24 @@ export const routes: Routes = [
       },
       {
         path: 'farms',
-        loadComponent: () => import('./shared/components/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent)
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/dashboard/farms/farms-list/farms-list.component').then(m => m.FarmsListComponent)
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./features/dashboard/farms/farm-form/farm-form.component').then(m => m.FarmFormComponent)
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./features/dashboard/farms/farm-details/farm-details.component').then(m => m.FarmDetailsComponent)
+          },
+          {
+            path: ':id/edit',
+            loadComponent: () => import('./features/dashboard/farms/farm-form/farm-form.component').then(m => m.FarmFormComponent)
+          }
+        ]
       },
       {
         path: 'crops',

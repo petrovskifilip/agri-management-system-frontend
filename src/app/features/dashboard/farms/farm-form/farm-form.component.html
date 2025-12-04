@@ -1,0 +1,104 @@
+<div class="farm-form-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <button mat-icon-button (click)="onCancel()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <mat-icon class="header-icon">{{ isEditMode ? 'edit' : 'add_business' }}</mat-icon>
+        <div>
+          <h1>{{ pageTitle }}</h1>
+          <p class="subtitle">{{ isEditMode ? 'Update farm information' : 'Add a new farm to your portfolio' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="farmForm" (ngSubmit)="onSubmit()">
+        <!-- Farm Name Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Farm Name</mat-label>
+          <input matInput
+                 formControlName="name"
+                 placeholder="Enter farm name"
+                 [disabled]="loading">
+          <mat-icon matPrefix>agriculture</mat-icon>
+          <mat-error *ngIf="farmForm.get('name')?.hasError('required')">
+            Farm name is required
+          </mat-error>
+          <mat-error *ngIf="farmForm.get('name')?.hasError('minlength')">
+            Farm name must be at least 3 characters
+          </mat-error>
+          <mat-error *ngIf="farmForm.get('name')?.hasError('maxlength')">
+            Farm name cannot exceed 100 characters
+          </mat-error>
+          <mat-hint>A descriptive name for your farm</mat-hint>
+        </mat-form-field>
+
+        <!-- Location Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Location</mat-label>
+          <input matInput
+                 formControlName="location"
+                 placeholder="Enter farm location"
+                 [disabled]="loading">
+          <mat-icon matPrefix>location_on</mat-icon>
+          <mat-error *ngIf="farmForm.get('location')?.hasError('maxlength')">
+            Location cannot exceed 200 characters
+          </mat-error>
+          <mat-hint>City, region, or address (optional)</mat-hint>
+        </mat-form-field>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button mat-button
+                  type="button"
+                  (click)="onCancel()"
+                  [disabled]="loading">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="farmForm.invalid || loading">
+            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!loading">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+            {{ loading ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Farm' : 'Create Farm') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Info Section -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>info</mat-icon>
+      <mat-card-title>Farm Information</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Each farm can contain multiple parcels for better organization</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Track irrigation and fertilization schedules for each farm</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Monitor crop performance and weather conditions</p>
+      </div>
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <p>Generate reports and analytics for your agricultural operations</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

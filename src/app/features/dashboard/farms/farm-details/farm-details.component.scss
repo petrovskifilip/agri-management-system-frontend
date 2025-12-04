@@ -1,0 +1,285 @@
+.farm-details-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+
+  p {
+    margin-top: 16px;
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.details-content {
+  .page-header {
+    margin-bottom: 24px;
+
+    .header-content {
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(124, 179, 66, 0.1) 0%, rgba(107, 142, 35, 0.05) 100%);
+      border-radius: 12px;
+      border: 2px solid rgba(124, 179, 66, 0.2);
+
+      .title-section {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+
+        .back-button {
+          color: #4a7c2c;
+        }
+
+        .header-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          color: #7cb342;
+        }
+
+        h1 {
+          font-size: 2rem;
+          color: #2d5016;
+          margin: 0;
+          font-weight: 700;
+        }
+
+        .subtitle {
+          color: #4a7c2c;
+          margin: 4px 0 0 0;
+          font-size: 1rem;
+        }
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+
+        button {
+          mat-icon {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .info-card, .parcels-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
+
+    mat-card-header {
+      padding: 20px 20px 0;
+
+      ::ng-deep {
+        .mat-mdc-card-avatar {
+          color: #7cb342;
+          background: rgba(124, 179, 66, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      mat-card-title {
+        color: #2d5016;
+        font-weight: 600;
+        font-size: 1.3rem;
+      }
+    }
+
+    mat-card-content {
+      padding: 24px;
+    }
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+
+    .info-item {
+      .info-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          color: #7cb342;
+        }
+      }
+
+      .info-value {
+        font-size: 1.1rem;
+        color: #2d5016;
+        font-weight: 600;
+        padding-left: 28px;
+      }
+    }
+  }
+
+  .parcels-card {
+    mat-card-header {
+      position: relative;
+
+      .header-actions-inline {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+
+        button {
+          mat-icon {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+
+    .loading-container-small {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+
+      p {
+        margin-top: 12px;
+        color: #666;
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+
+      .empty-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: rgba(124, 179, 66, 0.3);
+        margin-bottom: 12px;
+      }
+
+      h3 {
+        color: #2d5016;
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+      }
+
+      p {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      button {
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .table-container {
+      overflow-x: auto;
+
+      .parcels-table {
+        width: 100%;
+
+        th {
+          background: rgba(124, 179, 66, 0.1);
+          color: #2d5016;
+          font-weight: 600;
+          font-size: 0.95rem;
+          padding: 16px;
+        }
+
+        td {
+          padding: 16px;
+          color: #333;
+        }
+
+        .table-row {
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: rgba(124, 179, 66, 0.05);
+          }
+        }
+
+        .parcel-name {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-weight: 500;
+          color: #2d5016;
+
+          .table-icon {
+            color: #7cb342;
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+
+        .crop-cell {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .crop-icon {
+            color: #6b8e23;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .details-content {
+    .page-header .header-content {
+      .header-actions {
+        flex-direction: column;
+        width: 100%;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .parcels-card mat-card-header .header-actions-inline {
+      position: static;
+      margin-top: 16px;
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
