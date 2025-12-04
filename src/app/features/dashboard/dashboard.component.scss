@@ -41,6 +41,14 @@
   padding: 6px 16px;
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
 
   mat-icon {
     font-size: 20px;

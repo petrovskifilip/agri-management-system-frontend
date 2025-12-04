@@ -7,7 +7,7 @@
     <span class="app-title" [routerLink]="['/dashboard']">Agricultural Management System</span>
     <span class="spacer"></span>
     <div class="toolbar-end">
-      <span class="user-info">
+      <span class="user-info" [routerLink]="['/dashboard/profile']" matTooltip="View Profile">
         <mat-icon>account_circle</mat-icon>
         <span class="user-name">{{ currentUser()?.firstName }} {{ currentUser()?.lastName }}</span>
       </span>

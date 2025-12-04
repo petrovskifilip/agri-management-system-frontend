@@ -1,0 +1,206 @@
+<div class="profile-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="profile-avatar">
+        <div class="avatar-circle">
+          <span class="avatar-initials">{{ getInitials() }}</span>
+        </div>
+      </div>
+      <div class="profile-info">
+        <h1>{{ getFullName() }}</h1>
+        <p class="email">{{ user?.email }}</p>
+        <mat-chip [class]="getRoleClass(user!.role)">
+          <mat-icon>{{ user!.role === 'ADMIN' ? 'verified_user' : 'badge' }}</mat-icon>
+          {{ formatRole(user!.role) }}
+        </mat-chip>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="content-grid">
+    <!-- Personal Information Card -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon">person</mat-icon>
+        <mat-card-title>Personal Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>badge</mat-icon>
+            <span>First Name</span>
+          </div>
+          <div class="info-value">{{ user?.firstName }}</div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>badge</mat-icon>
+            <span>Last Name</span>
+          </div>
+          <div class="info-value">{{ user?.lastName }}</div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>email</mat-icon>
+            <span>Email Address</span>
+          </div>
+          <div class="info-value email-value">{{ user?.email }}</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Account Details Card -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon account">admin_panel_settings</mat-icon>
+        <mat-card-title>Account Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>shield</mat-icon>
+            <span>Role</span>
+          </div>
+          <div class="info-value">
+            <mat-chip [class]="getRoleClass(user!.role)">
+              {{ formatRole(user!.role) }}
+            </mat-chip>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>verified_user</mat-icon>
+            <span>Account Status</span>
+          </div>
+          <div class="info-value">
+            <div class="status-badge" [class.enabled]="user?.enabled">
+              <mat-icon>check_circle</mat-icon>
+              <span>Active</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>fingerprint</mat-icon>
+            <span>User ID</span>
+          </div>
+          <div class="info-value">{{ user?.id }}</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Timeline Card -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon timeline">schedule</mat-icon>
+        <mat-card-title>Account Timeline</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>event</mat-icon>
+            <span>Member Since</span>
+          </div>
+          <div class="info-value value-highlight">
+            {{ formatDateTime(user?.createdAt) }}
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-row">
+          <div class="info-label">
+            <mat-icon>update</mat-icon>
+            <span>Last Updated</span>
+          </div>
+          <div class="info-value">
+            {{ formatDateTime(user?.updatedAt) }}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Stats Card -->
+    <mat-card class="stats-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon stats">analytics</mat-icon>
+        <mat-card-title>Quick Access</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="quick-links">
+          <button mat-raised-button color="primary" routerLink="/dashboard/farms">
+            <mat-icon>agriculture</mat-icon>
+            My Farms
+          </button>
+          <button mat-raised-button color="accent" routerLink="/dashboard/parcels">
+            <mat-icon>landscape</mat-icon>
+            My Parcels
+          </button>
+          <button mat-raised-button class="irrigation-button" routerLink="/dashboard/irrigation">
+            <mat-icon>water_drop</mat-icon>
+            Irrigation
+          </button>
+          <button mat-raised-button class="fertilization-button" routerLink="/dashboard/fertilizations">
+            <mat-icon>eco</mat-icon>
+            Fertilization
+          </button>
+          <button mat-raised-button color="warn" routerLink="/dashboard/admin/users" *ngIf="user?.role === 'ADMIN'">
+            <mat-icon>people</mat-icon>
+            User Management
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- System Info Card -->
+    <mat-card class="info-card system-info">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="card-icon system">info</mat-icon>
+        <mat-card-title>System Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="system-features">
+          <div class="feature-badge">
+            <mat-icon>agriculture</mat-icon>
+            <span>Farm Management</span>
+          </div>
+          <div class="feature-badge">
+            <mat-icon>eco</mat-icon>
+            <span>Crop Tracking</span>
+          </div>
+          <div class="feature-badge">
+            <mat-icon>landscape</mat-icon>
+            <span>Parcel Management</span>
+          </div>
+          <div class="feature-badge">
+            <mat-icon>water_drop</mat-icon>
+            <span>Irrigation Control</span>
+          </div>
+          <div class="feature-badge">
+            <mat-icon>spa</mat-icon>
+            <span>Fertilization</span>
+          </div>
+          <div class="feature-badge">
+            <mat-icon>cloud</mat-icon>
+            <span>Weather Integration</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

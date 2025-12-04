@@ -133,6 +133,10 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'profile',
+        loadComponent: () => import('./features/dashboard/profile/profile.component').then(m => m.ProfileComponent)
+      },
+      {
         path: 'admin/users',
         children: [
           {
