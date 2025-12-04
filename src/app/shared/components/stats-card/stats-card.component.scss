@@ -1,0 +1,119 @@
+.stats-card {
+  cursor: default;
+  transition: all 0.3s ease;
+  height: 100%;
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.stats-content {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  gap: 20px;
+  min-height: 80px;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.stats-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stats-title {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats-loading {
+  display: flex;
+  align-items: center;
+
+  .spinner {
+    animation: spin 1s linear infinite;
+    color: #999;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// Color variants
+.color-primary .icon-container {
+  background: linear-gradient(135deg, #7cb342 0%, #689f38 100%);
+}
+
+.color-primary .stats-value {
+  color: #7cb342;
+}
+
+.color-accent .icon-container {
+  background: linear-gradient(135deg, #ff7043 0%, #f4511e 100%);
+}
+
+.color-accent .stats-value {
+  color: #ff7043;
+}
+
+.color-warn .icon-container {
+  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+}
+
+.color-warn .stats-value {
+  color: #ffa726;
+}
+
+.color-info .icon-container {
+  background: linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%);
+}
+
+.color-info .stats-value {
+  color: #42a5f5;
+}
+
+.color-success .icon-container {
+  background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+}
+
+.color-success .stats-value {
+  color: #66bb6a;
+}
+

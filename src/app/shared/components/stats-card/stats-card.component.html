@@ -1,0 +1,15 @@
+<mat-card class="stats-card" [class.clickable]="link" [routerLink]="link">
+  <div class="stats-content" [class]="'color-' + color">
+    <div class="icon-container">
+      <mat-icon>{{ icon }}</mat-icon>
+    </div>
+    <div class="stats-info">
+      <div class="stats-title">{{ title }}</div>
+      <div class="stats-value" *ngIf="!loading">{{ value }}</div>
+      <div class="stats-loading" *ngIf="loading">
+        <mat-icon class="spinner">refresh</mat-icon>
+      </div>
+    </div>
+  </div>
+</mat-card>
+

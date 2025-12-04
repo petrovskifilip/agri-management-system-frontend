@@ -1,0 +1,153 @@
+<div class="dashboard-home">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-header">
+      <h1>Welcome Back, {{ currentUser()?.firstName }}!</h1>
+      <p class="subtitle">Here's what's happening with your agricultural operations today</p>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <app-stats-card
+      title="Total Farms"
+      [value]="stats.farms.value"
+      icon="agriculture"
+      color="primary"
+      [loading]="stats.farms.loading"
+      link="/dashboard/farms">
+    </app-stats-card>
+
+    <app-stats-card
+      title="Total Parcels"
+      [value]="stats.parcels.value"
+      icon="landscape"
+      color="success"
+      [loading]="stats.parcels.loading"
+      link="/dashboard/parcels">
+    </app-stats-card>
+
+    <app-stats-card
+      title="Upcoming Irrigations"
+      [value]="stats.irrigations.value"
+      icon="water_drop"
+      color="info"
+      [loading]="stats.irrigations.loading"
+      link="/dashboard/irrigation">
+    </app-stats-card>
+
+    <app-stats-card
+      title="Scheduled Fertilizations"
+      [value]="stats.fertilizations.value"
+      icon="grass"
+      color="warn"
+      [loading]="stats.fertilizations.loading"
+      link="/dashboard/fertilization">
+    </app-stats-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions-section">
+    <h2>Quick Actions</h2>
+    <div class="actions-grid">
+      <mat-card class="action-card">
+        <mat-icon>add_business</mat-icon>
+        <h3>Add New Farm</h3>
+        <p>Register a new farm to manage</p>
+        <button mat-raised-button color="primary" routerLink="/dashboard/farms/new">
+          Create Farm
+        </button>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <mat-icon>map</mat-icon>
+        <h3>Add New Parcel</h3>
+        <p>Add a parcel to an existing farm</p>
+        <button mat-raised-button color="primary" routerLink="/dashboard/parcels/new">
+          Create Parcel
+        </button>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <mat-icon>water_drop</mat-icon>
+        <h3>Schedule Irrigation</h3>
+        <p>Plan irrigation for your parcels</p>
+        <button mat-raised-button color="primary" routerLink="/dashboard/irrigation/new">
+          Schedule
+        </button>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <mat-icon>eco</mat-icon>
+        <h3>Schedule Fertilization</h3>
+        <p>Plan fertilization activities</p>
+        <button mat-raised-button color="primary" routerLink="/dashboard/fertilization/new">
+          Schedule
+        </button>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Information Section -->
+  <div class="info-section">
+    <mat-card class="info-card">
+      <mat-card-header>
+        <div class="header-icon">
+          <mat-icon>dashboard</mat-icon>
+        </div>
+        <div class="header-content">
+          <mat-card-title>System Overview</mat-card-title>
+          <mat-card-subtitle>Your role: {{ currentUser()?.role }}</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <h3>Available Features</h3>
+        <div class="features-list">
+          <div class="feature-item">
+            <mat-icon>agriculture</mat-icon>
+            <div class="feature-text">
+              <strong>Farm Management</strong>
+              <span>Create and manage your farms</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <mat-icon>eco</mat-icon>
+            <div class="feature-text">
+              <strong>Crop Management</strong>
+              <span>Maintain crop information and requirements</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <mat-icon>landscape</mat-icon>
+            <div class="feature-text">
+              <strong>Parcel Management</strong>
+              <span>Organize land parcels with weather integration</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <mat-icon>water_drop</mat-icon>
+            <div class="feature-text">
+              <strong>Irrigation Control</strong>
+              <span>Schedule and monitor irrigation activities</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <mat-icon>grass</mat-icon>
+            <div class="feature-text">
+              <strong>Fertilization Planning</strong>
+              <span>Track fertilization schedules</span>
+            </div>
+          </div>
+          <div class="feature-item" *ngIf="currentUser()?.role === 'ADMIN'">
+            <mat-icon class="admin-icon">admin_panel_settings</mat-icon>
+            <div class="feature-text">
+              <strong>User Management</strong>
+              <span>Manage system users</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
