@@ -19,12 +19,12 @@ export class MapPickerComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   @Input() latitude?: number | null;
   @Input() longitude?: number | null;
   @Input() height: string = '400px';
-  @Input() zoom: number = 13;
+  @Input() zoom: number = 12;
   @Output() coordinateSelected = new EventEmitter<CoordinateSelection>();
 
   private map?: L.Map;
   private marker?: L.Marker;
-  private defaultCenter: L.LatLngExpression = [41.9973, 21.4280]; // Skopje, North Macedonia as default
+  private defaultCenter: L.LatLngExpression = [41.6086, 21.7453]; // Center of North Macedonia
 
   ngOnInit(): void {
     this.fixLeafletIconPath();
