@@ -127,6 +127,20 @@
             <mat-icon>warning</mat-icon>
             <p>Add coordinates to enable weather monitoring and location-based features.</p>
           </div>
+
+          <!-- Map Display -->
+          <div *ngIf="hasCoordinates()" class="map-section">
+            <mat-divider></mat-divider>
+            <div class="map-header">
+              <mat-icon>map</mat-icon>
+              <span>Parcel Location Map</span>
+            </div>
+            <app-parcel-map
+              [markers]="getMapMarkers()"
+              [zoom]="15"
+              [height]="'350px'">
+            </app-parcel-map>
+          </div>
         </mat-card-content>
       </mat-card>
 

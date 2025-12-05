@@ -16,6 +16,8 @@ import { CropService } from '../../../../core/services/crop.service';
 import { Parcel } from '../../../../core/models/parcel.model';
 import { Farm } from '../../../../core/models/farm.model';
 import { Crop } from '../../../../core/models/crop.model';
+import { MapPickerComponent, CoordinateSelection } from '../../../../shared/components/map-picker/map-picker.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-parcel-form',
@@ -31,7 +33,9 @@ import { Crop } from '../../../../core/models/crop.model';
     MatIconModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MapPickerComponent,
+    MatExpansionModule
   ],
   templateUrl: './parcel-form.component.html',
   styleUrl: './parcel-form.component.scss'
@@ -47,6 +51,7 @@ export class ParcelFormComponent implements OnInit {
   crops: Crop[] = [];
   loadingFarms = true;
   loadingCrops = true;
+  showMapPicker = true;
 
   constructor(
     private fb: FormBuilder,
@@ -180,7 +185,7 @@ export class ParcelFormComponent implements OnInit {
 
   private prepareFormData(): any {
     const formValue = this.parcelForm.value;
-    const data: any = {
+    let data: any = {
       name: formValue.name,
       farmId: +formValue.farmId
     };
@@ -204,6 +209,14 @@ export class ParcelFormComponent implements OnInit {
 
   onCancel(): void {
     this.router.navigate(['/dashboard/parcels']);
+  }
+
+
+  onCoordinateSelected(coordinates: CoordinateSelection): void {
+    this.parcelForm.patchValue({
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude
+    });
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {

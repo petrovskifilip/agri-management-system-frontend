@@ -1,0 +1,79 @@
+.map-picker-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e0e0e0;
+  cursor: crosshair;
+  margin-bottom: 8px;
+
+  &:hover {
+    border-color: #4caf50;
+  }
+}
+
+.map-picker-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background-color: rgba(76, 175, 80, 0.1);
+  border-left: 4px solid #4caf50;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #2e7d32;
+  margin-bottom: 16px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #4caf50;
+  }
+}
+
+:host ::ng-deep {
+  .coordinate-popup {
+    strong {
+      color: #2c3e50;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+  }
+
+  .leaflet-popup-content {
+    margin: 10px 14px;
+  }
+
+  // Make marker draggable cursor more obvious
+  .leaflet-marker-icon {
+    cursor: move !important;
+  }
+
+  // Add pulsing animation to marker
+  .leaflet-marker-icon {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      filter: drop-shadow(0 0 0 rgba(76, 175, 80, 0));
+    }
+    50% {
+      filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.5));
+    }
+    100% {
+      filter: drop-shadow(0 0 0 rgba(76, 175, 80, 0));
+    }
+  }
+}
+

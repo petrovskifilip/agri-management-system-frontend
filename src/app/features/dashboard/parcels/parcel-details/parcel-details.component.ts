@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ParcelService } from '../../../../core/services/parcel.service';
 import { Parcel, ParcelWeather } from '../../../../core/models/parcel.model';
+import { ParcelMapComponent, ParcelMapMarker } from '../../../../shared/components/parcel-map/parcel-map.component';
 
 @Component({
   selector: 'app-parcel-details',
@@ -25,7 +26,8 @@ import { Parcel, ParcelWeather } from '../../../../core/models/parcel.model';
     MatSnackBarModule,
     MatDividerModule,
     MatChipsModule,
-    MatTabsModule
+    MatTabsModule,
+    ParcelMapComponent
   ],
   templateUrl: './parcel-details.component.html',
   styleUrl: './parcel-details.component.scss'
@@ -139,6 +141,29 @@ export class ParcelDetailsComponent implements OnInit {
 
   isRainExpected(): boolean {
     return this.weather !== null && this.weather.rainExpectedInOneHour > 0;
+  }
+
+  getMapMarkers(): ParcelMapMarker[] {
+    if (!this.parcel || !this.parcel.latitude || !this.parcel.longitude) {
+      return [];
+    }
+
+    return [{
+      id: this.parcel.id,
+      name: this.parcel.name,
+      latitude: this.parcel.latitude,
+      longitude: this.parcel.longitude,
+      area: this.parcel.area,
+      cropName: this.parcel.cropName
+    }];
+  }
+
+  hasCoordinates(): boolean {
+    return this.parcel !== null &&
+           this.parcel.latitude !== undefined &&
+           this.parcel.latitude !== null &&
+           this.parcel.longitude !== undefined &&
+           this.parcel.longitude !== null;
   }
 }
 

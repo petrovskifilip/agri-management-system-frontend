@@ -125,9 +125,31 @@
             </mat-form-field>
           </div>
 
+
+          <!-- Map Picker Section -->
+          <mat-expansion-panel [expanded]="showMapPicker" class="map-picker-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>map</mat-icon>
+                Interactive Map Picker
+              </mat-panel-title>
+              <mat-panel-description>
+                Click on the map to select coordinates
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <app-map-picker
+              [latitude]="parcelForm.get('latitude')?.value"
+              [longitude]="parcelForm.get('longitude')?.value"
+              [height]="'400px'"
+              [zoom]="13"
+              (coordinateSelected)="onCoordinateSelected($event)">
+            </app-map-picker>
+          </mat-expansion-panel>
+
           <div class="location-hint">
             <mat-icon>info</mat-icon>
-            <p>Coordinates enable weather tracking and location-based features. You can find coordinates using Google Maps or GPS.</p>
+            <p>Coordinates enable weather tracking and location-based features. You can enter them manually, pick from the map above, or find them using Google Maps/GPS.</p>
           </div>
         </div>
 

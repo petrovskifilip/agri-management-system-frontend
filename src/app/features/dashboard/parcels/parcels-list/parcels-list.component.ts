@@ -12,6 +12,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { ParcelService } from '../../../../core/services/parcel.service';
 import { Parcel } from '../../../../core/models/parcel.model';
+import { ParcelMapComponent, ParcelMapMarker } from '../../../../shared/components/parcel-map/parcel-map.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-parcels-list',
@@ -27,7 +29,9 @@ import { Parcel } from '../../../../core/models/parcel.model';
     MatDialogModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    ParcelMapComponent,
+    MatButtonToggleModule
   ],
   templateUrl: './parcels-list.component.html',
   styleUrl: './parcels-list.component.scss'
@@ -36,6 +40,7 @@ export class ParcelsListComponent implements OnInit {
   parcels: Parcel[] = [];
   loading = true;
   displayedColumns: string[] = ['name', 'farmName', 'cropName', 'area', 'lastIrrigated', 'actions'];
+  viewMode: 'table' | 'map' = 'table';
 
   constructor(
     private parcelService: ParcelService,
@@ -104,6 +109,28 @@ export class ParcelsListComponent implements OnInit {
     if (!dateString) return 'Never';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  getMapMarkers(): ParcelMapMarker[] {
+    return this.parcels
+      .filter(p => p.latitude !== undefined && p.latitude !== null &&
+                   p.longitude !== undefined && p.longitude !== null)
+      .map(p => ({
+        id: p.id,
+        name: p.name,
+        latitude: p.latitude!,
+        longitude: p.longitude!,
+        area: p.area,
+        cropName: p.cropName
+      }));
+  }
+
+  hasCoordinates(): boolean {
+    return this.getMapMarkers().length > 0;
+  }
+
+  toggleViewMode(mode: 'table' | 'map'): void {
+    this.viewMode = mode;
   }
 }
 

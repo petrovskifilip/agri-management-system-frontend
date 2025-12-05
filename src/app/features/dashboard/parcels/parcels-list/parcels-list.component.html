@@ -9,10 +9,22 @@
           <p class="subtitle">Manage your land parcels and monitor conditions</p>
         </div>
       </div>
-      <button mat-raised-button color="primary" (click)="onCreateParcel()">
-        <mat-icon>add</mat-icon>
-        Add New Parcel
-      </button>
+      <div class="header-actions">
+        <mat-button-toggle-group [(value)]="viewMode" (change)="toggleViewMode(viewMode)">
+          <mat-button-toggle value="table">
+            <mat-icon>table_chart</mat-icon>
+            Table
+          </mat-button-toggle>
+          <mat-button-toggle value="map" [disabled]="!hasCoordinates()">
+            <mat-icon>map</mat-icon>
+            Map
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <button mat-raised-button color="primary" (click)="onCreateParcel()">
+          <mat-icon>add</mat-icon>
+          Add New Parcel
+        </button>
+      </div>
     </div>
   </div>
 
@@ -37,7 +49,7 @@
       </div>
 
       <!-- Parcels Table -->
-      <div *ngIf="!loading && parcels.length > 0" class="table-container">
+      <div *ngIf="!loading && parcels.length > 0 && viewMode === 'table'" class="table-container">
         <table mat-table [dataSource]="parcels" class="parcels-table">
           <!-- Name Column -->
           <ng-container matColumnDef="name">
@@ -126,6 +138,26 @@
               class="table-row"
               (click)="onViewParcel(row)"></tr>
         </table>
+      </div>
+
+      <!-- Map View -->
+      <div *ngIf="!loading && parcels.length > 0 && viewMode === 'map'" class="map-view-container">
+        <div *ngIf="hasCoordinates()" class="map-wrapper">
+          <app-parcel-map
+            [markers]="getMapMarkers()"
+            [zoom]="12"
+            [height]="'600px'">
+          </app-parcel-map>
+          <div class="map-info">
+            <mat-icon>info</mat-icon>
+            <span>Showing {{ getMapMarkers().length }} of {{ parcels.length }} parcels with coordinates</span>
+          </div>
+        </div>
+        <div *ngIf="!hasCoordinates()" class="no-coordinates">
+          <mat-icon>location_off</mat-icon>
+          <h3>No Parcel Coordinates</h3>
+          <p>None of your parcels have location coordinates set. Add latitude and longitude to your parcels to see them on the map.</p>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

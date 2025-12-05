@@ -120,6 +120,36 @@
     }
   }
 
+  .map-picker-toggle {
+    margin: 16px 0;
+
+    button {
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .map-picker-panel {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    mat-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      mat-icon {
+        color: #4caf50;
+      }
+    }
+
+    mat-panel-description {
+      color: #666;
+    }
+  }
+
   .form-actions {
     display: flex;
     justify-content: flex-end;
