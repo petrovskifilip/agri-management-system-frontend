@@ -68,6 +68,20 @@
         mat-icon {
           margin-right: 8px;
         }
+
+        &:first-child {
+          background-color: #15a35a !important;
+          color: white !important;
+
+          &:hover:not(:disabled) {
+            background-color: #15803d !important;
+          }
+
+          &:disabled {
+            background-color: #cccccc !important;
+            color: #666666 !important;
+          }
+        }
       }
     }
   }
