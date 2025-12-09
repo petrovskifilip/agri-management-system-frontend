@@ -10,6 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CropService } from '../../../../core/services/crop.service';
+import { ExportService } from '../../../../core/services/export.service';
 import { Crop } from '../../../../core/models/crop.model';
 
 @Component({
@@ -37,6 +38,7 @@ export class CropsListComponent implements OnInit {
 
   constructor(
     private cropService: CropService,
+    private exportService: ExportService,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -96,6 +98,24 @@ export class CropsListComponent implements OnInit {
         }
       });
     }
+  }
+
+  onExportCrops(): void {
+    this.exportService.exportCropManagement().subscribe({
+      next: () => {
+        this.snackBar.open('Export completed successfully', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error: any) => {
+        console.error('Export error:', error);
+        this.snackBar.open('Failed to export crops: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 }
 

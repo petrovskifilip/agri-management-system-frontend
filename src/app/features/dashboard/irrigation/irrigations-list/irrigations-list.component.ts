@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { IrrigationService } from '../../../../core/services/irrigation.service';
+import { ExportService } from '../../../../core/services/export.service';
 import { Irrigation } from '../../../../core/models/irrigation.model';
 import { IrrigationStatus } from '../../../../core/models/enums';
 
@@ -38,6 +39,7 @@ export class IrrigationsListComponent implements OnInit {
 
   constructor(
     private irrigationService: IrrigationService,
+    private exportService: ExportService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {}
@@ -119,6 +121,24 @@ export class IrrigationsListComponent implements OnInit {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
+    });
+  }
+
+  onExportIrrigations(): void {
+    this.exportService.exportAllIrrigations().subscribe({
+      next: () => {
+        this.snackBar.open('Export completed successfully', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error: any) => {
+        console.error('Export error:', error);
+        this.snackBar.open('Failed to export irrigations: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
     });
   }
 }

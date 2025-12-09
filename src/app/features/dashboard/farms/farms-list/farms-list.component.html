@@ -9,10 +9,16 @@
           <p class="subtitle">Manage your agricultural properties</p>
         </div>
       </div>
-      <button mat-raised-button color="primary" (click)="onCreateFarm()">
-        <mat-icon>add</mat-icon>
-        Create New Farm
-      </button>
+      <div class="action-buttons-group">
+        <button mat-raised-button color="primary" (click)="onExportFarms()" [disabled]="farms.length === 0">
+          <mat-icon>download</mat-icon>
+          Export to Excel
+        </button>
+        <button mat-raised-button color="primary" (click)="onCreateFarm()">
+          <mat-icon>add</mat-icon>
+          Create New Farm
+        </button>
+      </div>
     </div>
   </div>
 

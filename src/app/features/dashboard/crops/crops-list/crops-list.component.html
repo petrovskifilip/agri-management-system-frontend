@@ -9,10 +9,16 @@
           <p class="subtitle">Manage your crop varieties and cultivation requirements</p>
         </div>
       </div>
-      <button mat-raised-button color="primary" (click)="onCreateCrop()">
-        <mat-icon>add</mat-icon>
-        Add New Crop
-      </button>
+      <div class="action-buttons-group">
+        <button mat-raised-button color="primary" (click)="onExportCrops()" [disabled]="crops.length === 0">
+          <mat-icon>download</mat-icon>
+          Export to Excel
+        </button>
+        <button mat-raised-button color="primary" (click)="onCreateCrop()">
+          <mat-icon>add</mat-icon>
+          Add New Crop
+        </button>
+      </div>
     </div>
   </div>
 

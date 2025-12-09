@@ -9,10 +9,16 @@
           <p class="subtitle">Schedule and monitor irrigation activities</p>
         </div>
       </div>
-      <button mat-raised-button color="primary" (click)="onCreateIrrigation()">
-        <mat-icon>add</mat-icon>
-        Schedule Irrigation
-      </button>
+      <div class="action-buttons-group">
+        <button mat-raised-button color="primary" (click)="onExportIrrigations()" [disabled]="irrigations.length === 0">
+          <mat-icon>download</mat-icon>
+          Export to Excel
+        </button>
+        <button mat-raised-button color="primary" (click)="onCreateIrrigation()">
+          <mat-icon>add</mat-icon>
+          Schedule Irrigation
+        </button>
+      </div>
     </div>
   </div>
 

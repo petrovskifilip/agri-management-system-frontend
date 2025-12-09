@@ -21,6 +21,24 @@
           </div>
         </div>
         <div class="header-actions">
+          <button mat-raised-button color="primary" [matMenuTriggerFor]="exportMenu">
+            <mat-icon>download</mat-icon>
+            Export
+          </button>
+          <mat-menu #exportMenu="matMenu">
+            <button mat-menu-item (click)="onExportCompleteFarm()">
+              <mat-icon>description</mat-icon>
+              <span>Complete Farm Report</span>
+            </button>
+            <button mat-menu-item (click)="onExportFarmIrrigations()">
+              <mat-icon>water_drop</mat-icon>
+              <span>Farm Irrigations</span>
+            </button>
+            <button mat-menu-item (click)="onExportFarmFertilizations()">
+              <mat-icon>spa</mat-icon>
+              <span>Farm Fertilizations</span>
+            </button>
+          </mat-menu>
           <button mat-raised-button color="accent" (click)="onEdit()">
             <mat-icon>edit</mat-icon>
             Edit Farm

@@ -9,7 +9,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
 import { ParcelService } from '../../../../core/services/parcel.service';
+import { ExportService } from '../../../../core/services/export.service';
 import { Parcel, ParcelWeather } from '../../../../core/models/parcel.model';
 import { ParcelMapComponent, ParcelMapMarker } from '../../../../shared/components/parcel-map/parcel-map.component';
 
@@ -27,6 +29,7 @@ import { ParcelMapComponent, ParcelMapMarker } from '../../../../shared/componen
     MatDividerModule,
     MatChipsModule,
     MatTabsModule,
+    MatMenuModule,
     ParcelMapComponent
   ],
   templateUrl: './parcel-details.component.html',
@@ -41,6 +44,7 @@ export class ParcelDetailsComponent implements OnInit {
 
   constructor(
     private parcelService: ParcelService,
+    private exportService: ExportService,
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar
@@ -164,6 +168,42 @@ export class ParcelDetailsComponent implements OnInit {
            this.parcel.latitude !== null &&
            this.parcel.longitude !== undefined &&
            this.parcel.longitude !== null;
+  }
+
+  onExportParcelActivity(): void {
+    this.exportService.exportParcelActivity(this.parcelId).subscribe({
+      next: () => {
+        this.snackBar.open('Export completed successfully', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('Export error:', error);
+        this.snackBar.open('Failed to export parcel activity: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
+
+  onExportParcelWeather(): void {
+    this.exportService.exportParcelWeather(this.parcelId).subscribe({
+      next: () => {
+        this.snackBar.open('Export completed successfully', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('Export error:', error);
+        this.snackBar.open('Failed to export parcel weather: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 }
 

@@ -9,8 +9,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
 import { FarmService } from '../../../../core/services/farm.service';
 import { ParcelService } from '../../../../core/services/parcel.service';
+import { ExportService } from '../../../../core/services/export.service';
 import { Farm } from '../../../../core/models/farm.model';
 import { Parcel } from '../../../../core/models/parcel.model';
 
@@ -27,7 +29,8 @@ import { Parcel } from '../../../../core/models/parcel.model';
     MatSnackBarModule,
     MatTooltipModule,
     MatTableModule,
-    MatDividerModule
+    MatDividerModule,
+    MatMenuModule
   ],
   templateUrl: './farm-details.component.html',
   styleUrl: './farm-details.component.scss'
@@ -43,6 +46,7 @@ export class FarmDetailsComponent implements OnInit {
   constructor(
     private farmService: FarmService,
     private parcelService: ParcelService,
+    private exportService: ExportService,
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar
@@ -137,6 +141,66 @@ export class FarmDetailsComponent implements OnInit {
       month: 'long',
       day: 'numeric'
     });
+  }
+
+  onExportCompleteFarm(): void {
+    if (this.farmId) {
+      this.exportService.exportCompleteFarm(this.farmId).subscribe({
+        next: () => {
+          this.snackBar.open('Export completed successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        },
+        error: (error) => {
+          console.error('Export error:', error);
+          this.snackBar.open('Failed to export farm data: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+    }
+  }
+
+  onExportFarmIrrigations(): void {
+    if (this.farmId) {
+      this.exportService.exportIrrigationsByFarm(this.farmId).subscribe({
+        next: () => {
+          this.snackBar.open('Export completed successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        },
+        error: (error) => {
+          console.error('Export error:', error);
+          this.snackBar.open('Failed to export irrigations: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+    }
+  }
+
+  onExportFarmFertilizations(): void {
+    if (this.farmId) {
+      this.exportService.exportFertilizationsByFarm(this.farmId).subscribe({
+        next: () => {
+          this.snackBar.open('Export completed successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        },
+        error: (error) => {
+          console.error('Export error:', error);
+          this.snackBar.open('Failed to export fertilizations: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+    }
   }
 }
 

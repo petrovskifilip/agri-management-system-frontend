@@ -10,6 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FarmService } from '../../../../core/services/farm.service';
+import { ExportService } from '../../../../core/services/export.service';
 import { Farm } from '../../../../core/models/farm.model';
 
 @Component({
@@ -37,6 +38,7 @@ export class FarmsListComponent implements OnInit {
 
   constructor(
     private farmService: FarmService,
+    private exportService: ExportService,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -103,6 +105,34 @@ export class FarmsListComponent implements OnInit {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
+    });
+  }
+
+  onExportFarms(): void {
+    this.exportService.exportFarmOverview().subscribe({
+      next: () => {
+        this.snackBar.open('Export completed successfully', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error: any) => {
+        console.error('Export error:', error);
+        let errorMessage = 'Unknown error';
+
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error.error?.message) {
+          errorMessage = error.error.message;
+        } else if (error.statusText) {
+          errorMessage = error.statusText;
+        }
+
+        this.snackBar.open('Failed to export farms: ' + errorMessage, 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
     });
   }
 }

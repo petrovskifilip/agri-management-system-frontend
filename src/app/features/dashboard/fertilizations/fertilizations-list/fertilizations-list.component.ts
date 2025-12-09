@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { FertilizationService } from '../../../../core/services/fertilization.service';
+import { ExportService } from '../../../../core/services/export.service';
 import { Fertilization } from '../../../../core/models/fertilization.model';
 import { FertilizationStatus } from '../../../../core/models/enums';
 
@@ -38,6 +39,7 @@ export class FertilizationsListComponent implements OnInit {
 
   constructor(
     private fertilizationService: FertilizationService,
+    private exportService: ExportService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {}
@@ -121,6 +123,24 @@ export class FertilizationsListComponent implements OnInit {
 
   formatStatus(status: string): string {
     return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+  }
+
+  onExportFertilizations(): void {
+    this.exportService.exportAllFertilizations().subscribe({
+      next: () => {
+        this.snackBar.open('Export completed successfully', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('Export error:', error);
+        this.snackBar.open('Failed to export fertilizations: ' + (error.error?.message || error.message || 'Unknown error'), 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 }
 

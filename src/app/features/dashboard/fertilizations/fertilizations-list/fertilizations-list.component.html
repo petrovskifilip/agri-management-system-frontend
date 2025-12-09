@@ -9,10 +9,16 @@
           <p class="subtitle">Schedule and track fertilization activities</p>
         </div>
       </div>
-      <button mat-raised-button color="primary" (click)="onCreateFertilization()">
-        <mat-icon>add</mat-icon>
-        Schedule Fertilization
-      </button>
+      <div class="action-buttons-group">
+        <button mat-raised-button color="primary" (click)="onExportFertilizations()" [disabled]="fertilizations.length === 0">
+          <mat-icon>download</mat-icon>
+          Export to Excel
+        </button>
+        <button mat-raised-button color="primary" (click)="onCreateFertilization()">
+          <mat-icon>add</mat-icon>
+          Schedule Fertilization
+        </button>
+      </div>
     </div>
   </div>
 

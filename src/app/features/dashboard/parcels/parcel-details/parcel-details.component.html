@@ -21,6 +21,20 @@
           </div>
         </div>
         <div class="header-actions">
+          <button mat-raised-button color="primary" [matMenuTriggerFor]="exportMenu">
+            <mat-icon>download</mat-icon>
+            Export
+          </button>
+          <mat-menu #exportMenu="matMenu">
+            <button mat-menu-item (click)="onExportParcelActivity()">
+              <mat-icon>assessment</mat-icon>
+              <span>Parcel Activity Report</span>
+            </button>
+            <button mat-menu-item (click)="onExportParcelWeather()" [disabled]="!hasWeatherData()">
+              <mat-icon>cloud</mat-icon>
+              <span>Weather Data</span>
+            </button>
+          </mat-menu>
           <button mat-raised-button color="accent" (click)="onEdit()">
             <mat-icon>edit</mat-icon>
             Edit
