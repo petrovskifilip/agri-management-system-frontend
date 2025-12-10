@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { UserService } from '../../../../core/services/user.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { User } from '../../../../core/models/user.model';
 import { Role } from '../../../../core/models/enums';
 
@@ -41,7 +42,8 @@ export class UsersListComponent implements OnInit {
   constructor(
     private userService: UserService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -106,8 +108,55 @@ export class UsersListComponent implements OnInit {
     return user.role !== Role.ADMIN;
   }
 
+  canDelete(user: User): boolean {
+    const currentUser = this.authService.currentUser();
+
+    // Cannot delete yourself
+    if (currentUser && user.id === currentUser.id) {
+      return false;
+    }
+
+    // Cannot delete admin users
+    if (user.role === Role.ADMIN) {
+      return false;
+    }
+
+    return true;
+  }
+
+  getDeleteTooltip(user: User): string {
+    const currentUser = this.authService.currentUser();
+
+    if (currentUser && user.id === currentUser.id) {
+      return 'Cannot delete your own account';
+    }
+
+    if (user.role === Role.ADMIN) {
+      return 'Cannot delete admin users';
+    }
+
+    return 'Delete User';
+  }
+
   onDeleteUser(user: User, event: Event): void {
     event.stopPropagation();
+
+    if (!this.canDelete(user)) {
+      const currentUser = this.authService.currentUser();
+      let message = 'Cannot delete this user';
+
+      if (currentUser && user.id === currentUser.id) {
+        message = 'You cannot delete your own account';
+      } else if (user.role === Role.ADMIN) {
+        message = 'Cannot delete admin users';
+      }
+
+      this.snackBar.open(message, 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
 
     if (confirm(`Are you sure you want to delete user ${user.firstName} ${user.lastName}? This action cannot be undone.`)) {
       this.userService.deleteUser(user.id).subscribe({

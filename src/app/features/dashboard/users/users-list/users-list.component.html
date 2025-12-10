@@ -110,7 +110,8 @@
                 <button mat-icon-button
                         color="warn"
                         (click)="onDeleteUser(user, $event)"
-                        matTooltip="Delete User">
+                        [disabled]="!canDelete(user)"
+                        [matTooltip]="getDeleteTooltip(user)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>

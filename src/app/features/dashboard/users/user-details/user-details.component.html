@@ -29,7 +29,11 @@
             <mat-icon>{{ user.enabled ? 'block' : 'check_circle' }}</mat-icon>
             {{ user.enabled ? 'Disable' : 'Enable' }}
           </button>
-          <button mat-raised-button color="warn" (click)="onDelete()">
+          <button mat-raised-button
+                  color="warn"
+                  (click)="onDelete()"
+                  [disabled]="!canDelete()"
+                  [matTooltip]="getDeleteTooltip()">
             <mat-icon>delete</mat-icon>
             Delete
           </button>
