@@ -138,6 +138,7 @@
 .farms-table {
   width: 100%;
   background: white;
+  table-layout: fixed;
 
   th {
     background: rgba(124, 179, 66, 0.1);
@@ -150,6 +151,27 @@
   td {
     padding: 16px;
     color: #333;
+  }
+
+  // Column width distribution
+  .mat-column-name {
+    width: 25%;
+  }
+
+  .mat-column-location {
+    width: 25%;
+  }
+
+  .mat-column-parcelCount {
+    width: 20%;
+  }
+
+  .mat-column-createdAt {
+    width: 15%;
+  }
+
+  .mat-column-actions {
+    width: 15%;
   }
 
   .table-row {
@@ -213,6 +235,16 @@
         transform: scale(1.1);
       }
     }
+  }
+
+  // Align actions header with action buttons
+  th.mat-column-actions {
+    text-align: right;
+    padding-right: 70px;
+  }
+
+  td.mat-column-actions {
+    padding-right: 16px;
   }
 }
 
